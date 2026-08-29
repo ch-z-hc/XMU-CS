@@ -446,8 +446,8 @@ function render(){
 function renderToday(list, onlyToday){
   const box = $('#todayList');
   const todayCourses = list.filter(c=>isToday(c.XQ)).sort(byTime);
-  if(!todayCourses.length){ box.innerHTML = ''; $('#cardToday').hidden = true; return; }
   $('#cardToday').hidden = false;
+  if(!todayCourses.length){ box.innerHTML = ''; return; }
   box.innerHTML = '';
   todayCourses.forEach(c=>{
     const weeks = c.ZCMC || '';
