@@ -311,7 +311,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .hero{position:relative;overflow:hidden;color:#fff;background:linear-gradient(125deg,#0a315b 0%,#10528b 58%,#1876ad 100%);border-radius:28px;padding:24px 28px 34px;box-shadow:0 24px 60px rgba(11,55,100,.22)}
   .hero::before,.hero::after{content:"";position:absolute;border:1px solid rgba(255,255,255,.13);border-radius:50%;pointer-events:none}.hero::before{width:280px;height:280px;right:-76px;top:-152px}.hero::after{width:180px;height:180px;right:66px;bottom:-144px}
   .hero-main{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-top:8px}.eyebrow{margin:0 0 7px;color:#a9d6f5;font-size:11px;font-weight:750;letter-spacing:.18em}.hero h1{margin:0;font-family:Georgia,"Songti SC","STSong",serif;font-size:42px;font-weight:700;letter-spacing:.02em;line-height:1.15}.hero-name{margin:10px 0 0;color:rgba(255,255,255,.72);font-size:15px;font-weight:650}
-  .week-orb{min-width:178px;padding:18px 20px;border:1px solid rgba(255,255,255,.22);border-radius:18px;background:rgba(255,255,255,.10);backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}.week-orb span{display:block;color:rgba(255,255,255,.65);font-size:11px}.week-orb strong{display:block;margin:2px 0 4px;font-size:24px;line-height:1.25}.week-orb small{display:block;color:rgba(255,255,255,.72);font-size:12px;white-space:nowrap}
+  .week-orb{min-width:178px;padding:18px 20px;border:1px solid rgba(255,255,255,.22);border-radius:18px;background:rgba(255,255,255,.10);backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}.week-orb span{display:block;color:rgba(255,255,255,.65);font-size:11px}.week-orb strong{display:block;margin:2px 0 4px;font-size:24px;line-height:1.25}.week-orb small{display:block;color:rgba(255,255,255,.72);font-size:12px;line-height:1.35;white-space:nowrap}
   .toolbar{display:flex;align-items:center;gap:20px;margin-bottom:18px;padding:14px 16px 14px 20px;background:rgba(255,255,255,.78);border:1px solid rgba(222,230,239,.92);border-radius:18px;box-shadow:0 8px 30px rgba(27,55,90,.05);backdrop-filter:blur(12px)}.control-copy{min-width:120px;margin-right:auto}.section-kicker{display:block;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.control-copy strong{display:block;font-size:15px;margin-top:1px}
   .week-switch{display:flex;align-items:center;gap:8px;padding:4px;background:#edf2f7;border-radius:13px}select,button{height:38px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px}select{min-width:104px;padding:0 34px 0 13px;font-weight:700;cursor:pointer}button{padding:0 12px;cursor:pointer;transition:transform .15s ease,background .15s ease,border-color .15s ease}button:hover{background:var(--accent-soft);border-color:#c9deee}button:active{transform:translateY(1px)}select:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(23,105,170,.18);outline-offset:2px}.week-switch button{width:38px;padding:0;font-size:18px;background:transparent;border-color:transparent}
   .toggle{display:flex;align-items:center;gap:9px;color:#536176;font-size:13px;font-weight:600;cursor:pointer;user-select:none}.toggle input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}.switch{position:relative;width:38px;height:22px;border-radius:999px;background:#cbd5df;transition:background .2s ease}.switch::after{content:"";position:absolute;width:16px;height:16px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(33,45,61,.22);transition:transform .2s ease}.toggle input:checked + .switch{background:var(--accent)}.toggle input:checked + .switch::after{transform:translateX(16px)}.toggle input:focus-visible + .switch{outline:3px solid rgba(23,105,170,.18);outline-offset:2px}
@@ -322,7 +322,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .tc1{--course:#3977c3;--course-bg:#edf4fc;--course-border:#d5e5f6;--course-ink:#245489;--course-muted:#5c7796}.tc2{--course:#3b9276;--course-bg:#edf8f4;--course-border:#d3ede4;--course-ink:#286b56;--course-muted:#5a7f72}.tc3{--course:#ca7b3a;--course-bg:#fff5ea;--course-border:#f4dfc7;--course-ink:#92531f;--course-muted:#947356}.tc4{--course:#8d67ba;--course-bg:#f6f0fb;--course-border:#e6d8f2;--course-ink:#66438f;--course-muted:#7d6a91}.tc5{--course:#348c9d;--course-bg:#ecf8fa;--course-border:#d0ebef;--course-ink:#286a76;--course-muted:#597e85}.tc6{--course:#c85e67;--course-bg:#fff0f1;--course-border:#f4d6d9;--course-ink:#93434a;--course-muted:#93686c}.tc7{--course:#6575b9;--course-bg:#f0f2fb;--course-border:#dce1f5;--course-ink:#45558f;--course-muted:#687399}
   body.modal-open{overflow:hidden}.modal-backdrop{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(8,29,53,.48);opacity:0;visibility:hidden;transition:opacity .18s ease,visibility .18s ease}.modal-backdrop.open{opacity:1;visibility:visible}.course-modal{position:relative;width:min(100%,460px);padding:27px 28px 25px;background:#fff;border:1px solid rgba(224,231,239,.95);border-radius:24px;box-shadow:0 24px 70px rgba(8,29,53,.25);transform:translateY(10px) scale(.98);transition:transform .2s ease}.modal-backdrop.open .course-modal{transform:none}.modal-close{position:absolute;right:15px;top:14px;width:32px;height:32px;padding:0;border:0;border-radius:50%;color:#718096;background:#f2f5f8;font-size:22px;line-height:1}.modal-close:hover{color:var(--ink);background:#e8eef4}.modal-kicker{color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.16em}.modal-title{margin:7px 38px 3px 0;color:var(--ink);font-size:23px;line-height:1.3}.modal-class{min-height:18px;color:var(--muted);font-size:12px}.modal-details{display:grid;gap:9px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.detail-row{display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:start;font-size:13px}.detail-row span{color:var(--muted)}.detail-row b{color:var(--ink);font-weight:650;word-break:normal;overflow-wrap:anywhere}.modal-hint{margin:20px 0 0;color:#93a0af;font-size:11px}
   @media (max-width:800px){.wrap{padding:16px 12px 48px}.hero{border-radius:22px;padding:20px 20px 30px}.hero-main{margin-top:8px}.toolbar{align-items:flex-end;flex-wrap:wrap;gap:12px}.control-copy{width:100%}.toggle{margin-left:auto}}
-  @media (max-width:560px){.hero-main{display:block;margin-top:8px}.hero h1{font-size:34px}.week-orb{display:flex;align-items:center;gap:8px;min-width:0;margin-top:22px;padding:12px 14px}.week-orb span{display:none}.week-orb strong{font-size:18px;margin:0}.week-orb small{margin-left:auto;font-size:11px}.toolbar{padding:14px}.control-copy{display:none}.week-switch{flex:1}.week-switch select{flex:1}.toggle{width:100%;justify-content:flex-end}.card{padding:17px 14px;border-radius:18px}.lesson{gap:10px;padding-right:10px}.lesson .time{min-width:76px;padding:0 11px}.lesson .class-name{display:none}.section-meta{font-size:11px}.modal-backdrop{align-items:end;padding:12px}.course-modal{width:100%;padding:24px 20px 22px;border-radius:24px 24px 15px 15px}.modal-title{font-size:21px}}
+@media (max-width:560px){.hero-main{display:block;margin-top:8px}.hero h1{font-size:34px}.week-orb{display:flex;align-items:center;gap:8px;min-width:0;margin-top:22px;padding:12px 14px}.week-orb span{display:none}.week-orb strong{font-size:18px;margin:0}.week-orb small{margin-left:auto;font-size:11px;text-align:right;white-space:normal}.toolbar{padding:14px}.control-copy{display:none}.week-switch{flex:1}.week-switch select{flex:1}.toggle{width:100%;justify-content:flex-end}.card{padding:17px 14px;border-radius:18px}.lesson{gap:10px;padding-right:10px}.lesson .time{min-width:76px;padding:0 11px}.lesson .class-name{display:none}.section-meta{font-size:11px}.modal-backdrop{align-items:end;padding:12px}.course-modal{width:100%;padding:24px 20px 22px;border-radius:24px 24px 15px 15px}.modal-title{font-size:21px}}
   @media (max-width:560px){.wrap{padding-left:8px;padding-right:8px}.hero{padding:18px 16px 24px}.hero h1{font-size:31px}.hero-name{font-size:14px}.card{padding:15px 10px}.grid-scroll{overflow-x:hidden}.grid-scroll table.kb{min-width:0;table-layout:fixed;font-size:11px}.grid-scroll table.kb th.timecol,.grid-scroll table.kb td.timecell{width:58px;min-width:58px}.grid-scroll table.kb th.daycol{padding-left:2px;padding-right:2px;font-size:11px}.grid-scroll table.kb td.timecell div{white-space:nowrap;font-size:10px}.grid-scroll .blk{padding:5px 4px;font-size:10px;border-left-width:2px}.grid-scroll .blk .t1{line-height:1.2}.section-head h2{font-size:17px}.lesson .name{font-size:14px}}
   @media (prefers-reduced-motion:reduce){button,.switch,.switch::after,.lesson{transition:none}}
   pre.json{display:none}
@@ -337,7 +337,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         <h1>我的课表</h1>
         <p class="hero-name" id="heroName"></p>
       </div>
-      <div class="week-orb"><span>当前查看</span><strong id="heroWeek"></strong><small id="heroDate"></small></div>
+      <div class="week-orb"><span>当前查看</span><strong id="heroWeek"></strong><small id="heroWeekRange"></small></div>
     </div>
   </header>
 
@@ -387,6 +387,19 @@ function dateLabel(d){
   const day = DATA.dayShort[d.getDay()===0?7:d.getDay()] || '';
   return d.getFullYear()+' 年 '+(d.getMonth()+1)+' 月 '+d.getDate()+' 日 · '+day;
 }
+function weekRangeLabel(week){
+  const today = new Date();
+  const monday = new Date(today);
+  monday.setHours(0,0,0,0);
+  monday.setDate(today.getDate()-((today.getDay()+6)%7)+(week-DATA.defaultWeek)*7);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate()+6);
+  const left = monday.getFullYear()+' 年 '+(monday.getMonth()+1)+' 月 '+monday.getDate()+' 日';
+  const right = sunday.getFullYear()===monday.getFullYear()
+    ? (sunday.getMonth()+1)+' 月 '+sunday.getDate()+' 日'
+    : sunday.getFullYear()+' 年 '+(sunday.getMonth()+1)+' 月 '+sunday.getDate()+' 日';
+  return left+' - '+right;
+}
 
 const PALETTE = ['tc1','tc2','tc3','tc4','tc5','tc6','tc7'];
 const ROW_HEIGHT = 68;
@@ -425,6 +438,7 @@ function render(){
   // 本周有课的课程
   const weekCourses = DATA.schedule.filter(c=>activeWeek(c, week) && +c.XQ>=1 && +c.XQ<=5);
   $('#heroWeek').textContent = '第 '+week+' 周';
+  $('#heroWeekRange').textContent = weekRangeLabel(week);
   renderToday(weekCourses, onlyToday);
   renderGrid(week, weekCourses, dayCols, onlyToday);
 }
@@ -563,7 +577,6 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape' && $('#courseModal
 (function(){
   $('#heroName').textContent = prettyText(DATA.student.name);
   const today = new Date();
-  $('#heroDate').textContent = dateLabel(today);
   $('#todayDate').textContent = dateLabel(today);
   render();
 })();
