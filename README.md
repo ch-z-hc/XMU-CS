@@ -14,9 +14,9 @@
 
 下面是生成页面的脱敏预览（示例数据仅用于展示界面）：
 
-![课表页面示例](docs/schedule-demo.svg)
+![课表页面示例](docs/schedule-demo.png)
 
-也可以直接打开 [示例图原文件](docs/schedule-demo.svg) 查看大图。
+也可以直接打开 [示例页面](docs/schedule-demo.html) 或 [示例图原文件](docs/schedule-demo.png) 查看大图。
 
 ## 安装依赖
 
