@@ -491,7 +491,13 @@ function byTime(a,b){ return (a.KSSJ||0)-(b.KSSJ||0); }
     if(cur==='before' && d>0){ sel.value=DATA.weeks[0]; }
     else if(cur==='after' && d<0){ sel.value=DATA.weeks[DATA.weeks.length-1]; }
     else if(cur==='before' || cur==='after'){ return; }
-    else { let n=+cur+d; if(n<DATA.weeks[0])n=DATA.weeks[0]; if(n>DATA.weeks[DATA.weeks.length-1])n=DATA.weeks[DATA.weeks.length-1]; sel.value=n; }
+    else {
+      const first = DATA.weeks[0], last = DATA.weeks[DATA.weeks.length-1];
+      const n = +cur + d;
+      if(DATA.term.startDate && n < first) sel.value='before';
+      else if(DATA.term.startDate && n > last) sel.value='after';
+      else sel.value=Math.max(first, Math.min(last, n));
+    }
     render();
   }
   $('#onlyToday').addEventListener('change', render);
