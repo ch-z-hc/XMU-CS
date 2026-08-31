@@ -92,10 +92,17 @@ function dateLabel(d){
   return d.getFullYear()+' 年 '+(d.getMonth()+1)+' 月 '+d.getDate()+' 日 · '+day;
 }
 function weekRangeLabel(week){
-  const today = new Date();
-  const monday = new Date(today);
-  monday.setHours(0,0,0,0);
-  monday.setDate(today.getDate()-((today.getDay()+6)%7)+(week-DATA.defaultWeek)*7);
+  let monday;
+  if(DATA.term.startDate){
+    monday = new Date(DATA.term.startDate+'T00:00:00');
+    if(Number.isNaN(monday.getTime())) return '';
+    monday.setDate(monday.getDate()+(week-1)*7);
+  } else {
+    const today = new Date();
+    monday = new Date(today);
+    monday.setHours(0,0,0,0);
+    monday.setDate(today.getDate()-((today.getDay()+6)%7)+(week-DATA.defaultWeek)*7);
+  }
   const sunday = new Date(monday);
   sunday.setDate(monday.getDate()+6);
   const left = monday.getFullYear()+' 年 '+(monday.getMonth()+1)+' 月 '+monday.getDate()+' 日';
@@ -111,14 +118,29 @@ const courseColor = {};
 let colorIdx = 0;
 DATA.schedule.forEach(c=>{ const k = c.KCDM + '-' + c.BJMC; if(!courseColor[k]) courseColor[k] = PALETTE[colorIdx++ % PALETTE.length]; });
 
-function fmt(t){ t = String(t||''); return t.length===4 ? t.slice(0,2)+':'+t.slice(2) : t; }
+function fmt(t){
+  if(t===null || t===undefined || t==='') return '';
+  const raw = String(t).trim();
+  if(!/^\d{1,4}$/.test(raw)) return raw;
+  const hhmm = raw.padStart(4,'0');
+  return hhmm.slice(0,2)+':'+hhmm.slice(2);
+}
 function activeWeek(c, week){
   const z = c.ZCBH || '';
   return z.length>=week ? z[week-1]==='1' : false;
 }
-function isToday(xq){
+function isToday(xq, week){
   const d = new Date();
   const iso = (d.getDay()===0 ? 7 : d.getDay()); // 周日=7
+  if(DATA.term.startDate){
+    const monday = new Date(DATA.term.startDate+'T00:00:00');
+    if(Number.isNaN(monday.getTime())) return false;
+    monday.setDate(monday.getDate()+(week-1)*7);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate()+6);
+    d.setHours(0,0,0,0);
+    if(d<monday || d>sunday) return false;
+  }
   return (xq==iso);
 }
 function byTime(a,b){ return (a.KSSJ||0)-(b.KSSJ||0); }
@@ -143,13 +165,13 @@ function render(){
   const weekCourses = DATA.schedule.filter(c=>activeWeek(c, week) && +c.XQ>=1 && +c.XQ<=5);
   $('#heroWeek').textContent = '第 '+week+' 周';
   $('#heroWeekRange').textContent = weekRangeLabel(week);
-  renderToday(weekCourses, onlyToday);
+  renderToday(weekCourses, week, onlyToday);
   renderGrid(week, weekCourses, dayCols, onlyToday);
 }
 
-function renderToday(list, onlyToday){
+function renderToday(list, week, onlyToday){
   const box = $('#todayList');
-  const todayCourses = list.filter(c=>isToday(c.XQ)).sort(byTime);
+  const todayCourses = list.filter(c=>isToday(c.XQ, week)).sort(byTime);
   $('#cardToday').hidden = false;
   if(!todayCourses.length){ box.innerHTML = ''; return; }
   box.innerHTML = '';
@@ -187,7 +209,7 @@ function renderGrid(week, weekCourses, dayCols, onlyToday){
   // 先计算每天的并行轨道，避免同一时段的课程互相覆盖
   const placements = [];
   weekCourses.forEach(c=>{
-    if(onlyToday && !isToday(c.XQ)) return;
+    if(onlyToday && !isToday(c.XQ, week)) return;
     const rows = periods.filter(p=>+p.DM>=+c.KSJCDM && +p.DM<=+c.JSJCDM);
     const colIdx = dayCols.indexOf(c.XQ);
     if(!rows.length || colIdx<0) return;

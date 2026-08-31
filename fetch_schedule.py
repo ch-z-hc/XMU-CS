@@ -196,6 +196,18 @@ def get_student(s, xh):
     return j["data"][0] if j.get("data") else {}
 
 
+def extract_term_start(term):
+    """读取学期首周日期；当前接口通常不返回该字段，缺失时返回 None。"""
+    for key in ("KSRQ", "XQKSRQ", "XNXQKSRQ", "START_DATE", "startDate", "start_date"):
+        value = term.get(key)
+        if value:
+            match = re.match(r"(\d{4})[-/](\d{1,2})[-/](\d{1,2})", str(value).strip())
+            if match:
+                year, month, day = match.groups()
+                return f"{year}-{int(month):02d}-{int(day):02d}"
+    return None
+
+
 # ----------------------------- 工具 -----------------------------
 def to_time(minutes):
     """1430 -> '14:30'；800 -> '08:00'。"""
@@ -244,11 +256,14 @@ def collect(args):
         term = terms[0]
     xnxqdm = term["XNXQDM"]
     term_name = term.get("XNXQDM_DISPLAY") or xnxqdm
+    # 教务接口通常不返回开学日期，优先使用 config.json 中的手工配置。
+    term_start = extract_term_start(cfg) or extract_term_start(term)
 
     print("[4/5] 获取当前周次与节次 ...")
     week_info = get_current_week(s, xnxqdm)
     default_week = args.week or cfg.get("week") or week_info["current"]
     default_week = int(default_week) if str(default_week).isdigit() else 1
+    auto_week = not (args.week or cfg.get("week"))
     weeks = week_info["weeks"] or [default_week]
 
     periods = get_periods(s, xnxqdm, username)
@@ -261,8 +276,8 @@ def collect(args):
     return {
         "username": username,
         "student": student,
-        "term": {"code": xnxqdm, "name": term_name},
-        "week_info": {"current": default_week, "weeks": weeks},
+        "term": {"code": xnxqdm, "name": term_name, "startDate": term_start},
+        "week_info": {"current": default_week, "weeks": weeks, "auto": auto_week},
         "periods": periods,
         "weekday_order": weekday_order,
         "schedule": schedule,
@@ -281,8 +296,13 @@ def build_html(data):
     schedule = [{k: c.get(k) for k in schedule_fields} for c in data["schedule"]]
     payload = {
         "student": {"name": student_name},
-        "term": {"code": data["term"]["code"], "name": term_name},
+        "term": {
+            "code": data["term"]["code"],
+            "name": term_name,
+            "startDate": data["term"].get("startDate"),
+        },
         "defaultWeek": default_week,
+        "autoWeek": data["week_info"].get("auto", False),
         "weeks": weeks,
         "periods": data["periods"],
         "weekdayOrder": data["weekday_order"],
@@ -311,7 +331,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .hero{position:relative;overflow:hidden;color:#fff;background:linear-gradient(125deg,#0a315b 0%,#10528b 58%,#1876ad 100%);border-radius:28px;padding:24px 28px 34px;box-shadow:0 24px 60px rgba(11,55,100,.22)}
   .hero::before,.hero::after{content:"";position:absolute;border:1px solid rgba(255,255,255,.13);border-radius:50%;pointer-events:none}.hero::before{width:280px;height:280px;right:-76px;top:-152px}.hero::after{width:180px;height:180px;right:66px;bottom:-144px}
   .hero-main{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-top:8px}.eyebrow{margin:0 0 7px;color:#a9d6f5;font-size:11px;font-weight:750;letter-spacing:.18em}.hero h1{margin:0;font-family:Georgia,"Songti SC","STSong",serif;font-size:42px;font-weight:700;letter-spacing:.02em;line-height:1.15}.hero-name{margin:10px 0 0;color:rgba(255,255,255,.72);font-size:15px;font-weight:650}
-  .week-orb{min-width:178px;padding:18px 20px;border:1px solid rgba(255,255,255,.22);border-radius:18px;background:rgba(255,255,255,.10);backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}.week-orb span{display:block;color:rgba(255,255,255,.65);font-size:11px}.week-orb strong{display:block;margin:2px 0 4px;font-size:24px;line-height:1.25}.week-orb small{display:block;color:rgba(255,255,255,.72);font-size:12px;line-height:1.35;white-space:nowrap}
+  .week-orb{min-width:178px;padding:18px 20px;border:1px solid rgba(255,255,255,.22);border-radius:18px;background:rgba(255,255,255,.10);backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}.week-orb span{display:block;color:rgba(255,255,255,.65);font-size:11px}.week-orb strong{display:block;margin:2px 0 4px;font-size:24px;line-height:1.25}.week-orb small{display:block;color:rgba(255,255,255,.72);font-size:12px;line-height:1.35;white-space:nowrap}.week-orb small:empty{display:none}
   .toolbar{display:flex;align-items:center;gap:20px;margin-bottom:18px;padding:14px 16px 14px 20px;background:rgba(255,255,255,.78);border:1px solid rgba(222,230,239,.92);border-radius:18px;box-shadow:0 8px 30px rgba(27,55,90,.05);backdrop-filter:blur(12px)}.control-copy{min-width:120px;margin-right:auto}.section-kicker{display:block;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.control-copy strong{display:block;font-size:15px;margin-top:1px}
   .week-switch{display:flex;align-items:center;gap:8px;padding:4px;background:#edf2f7;border-radius:13px}select,button{height:38px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px}select{min-width:104px;padding:0 34px 0 13px;font-weight:700;cursor:pointer}button{padding:0 12px;cursor:pointer;transition:transform .15s ease,background .15s ease,border-color .15s ease}button:hover{background:var(--accent-soft);border-color:#c9deee}button:active{transform:translateY(1px)}select:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(23,105,170,.18);outline-offset:2px}.week-switch button{width:38px;padding:0;font-size:18px;background:transparent;border-color:transparent}
   .toggle{display:flex;align-items:center;gap:9px;color:#536176;font-size:13px;font-weight:600;cursor:pointer;user-select:none}.toggle input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}.switch{position:relative;width:38px;height:22px;border-radius:999px;background:#cbd5df;transition:background .2s ease}.switch::after{content:"";position:absolute;width:16px;height:16px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(33,45,61,.22);transition:transform .2s ease}.toggle input:checked + .switch{background:var(--accent)}.toggle input:checked + .switch::after{transform:translateX(16px)}.toggle input:focus-visible + .switch{outline:3px solid rgba(23,105,170,.18);outline-offset:2px}
@@ -388,10 +408,14 @@ function dateLabel(d){
   return d.getFullYear()+' 年 '+(d.getMonth()+1)+' 月 '+d.getDate()+' 日 · '+day;
 }
 function weekRangeLabel(week){
-  const today = new Date();
-  const monday = new Date(today);
-  monday.setHours(0,0,0,0);
-  monday.setDate(today.getDate()-((today.getDay()+6)%7)+(week-DATA.defaultWeek)*7);
+  if(!DATA.term.startDate) return '';
+  const monday = new Date(DATA.term.startDate+'T00:00:00');
+  if(Number.isNaN(monday.getTime())) return '';
+  if(week==='before'){
+    return '开学日期：'+monday.getFullYear()+' 年 '+(monday.getMonth()+1)+' 月 '+monday.getDate()+' 日';
+  }
+  if(week==='after') return '本学期已结束';
+  monday.setDate(monday.getDate()+(week-1)*7);
   const sunday = new Date(monday);
   sunday.setDate(monday.getDate()+6);
   const left = monday.getFullYear()+' 年 '+(monday.getMonth()+1)+' 月 '+monday.getDate()+' 日';
@@ -400,6 +424,19 @@ function weekRangeLabel(week){
     : sunday.getFullYear()+' 年 '+(sunday.getMonth()+1)+' 月 '+sunday.getDate()+' 日';
   return left+' - '+right;
 }
+function currentWeekNumber(){
+  if(!DATA.term.startDate || !DATA.weeks.length) return null;
+  const start = new Date(DATA.term.startDate+'T00:00:00');
+  if(Number.isNaN(start.getTime())) return null;
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  start.setHours(0,0,0,0);
+  const elapsed = Math.floor((today-start)/86400000);
+  if(elapsed < 0) return 'before';
+  const raw = Math.floor(elapsed/7)+1;
+  if(raw > DATA.weeks[DATA.weeks.length-1]) return 'after';
+  return Math.max(raw, DATA.weeks[0]);
+}
 
 const PALETTE = ['tc1','tc2','tc3','tc4','tc5','tc6','tc7'];
 const ROW_HEIGHT = 68;
@@ -407,14 +444,29 @@ const courseColor = {};
 let colorIdx = 0;
 DATA.schedule.forEach(c=>{ const k = c.KCDM + '-' + c.BJMC; if(!courseColor[k]) courseColor[k] = PALETTE[colorIdx++ % PALETTE.length]; });
 
-function fmt(t){ t = String(t||''); return t.length===4 ? t.slice(0,2)+':'+t.slice(2) : t; }
+function fmt(t){
+  if(t===null || t===undefined || t==='') return '';
+  const raw = String(t).trim();
+  if(!/^\d{1,4}$/.test(raw)) return raw;
+  const hhmm = raw.padStart(4,'0');
+  return hhmm.slice(0,2)+':'+hhmm.slice(2);
+}
 function activeWeek(c, week){
   const z = c.ZCBH || '';
   return z.length>=week ? z[week-1]==='1' : false;
 }
-function isToday(xq){
+function isToday(xq, week){
   const d = new Date();
   const iso = (d.getDay()===0 ? 7 : d.getDay()); // 周日=7
+  if(DATA.term.startDate){
+    const monday = new Date(DATA.term.startDate+'T00:00:00');
+    if(Number.isNaN(monday.getTime())) return false;
+    monday.setDate(monday.getDate()+(week-1)*7);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate()+6);
+    d.setHours(0,0,0,0);
+    if(d<monday || d>sunday) return false;
+  }
   return (xq==iso);
 }
 function byTime(a,b){ return (a.KSSJ||0)-(b.KSSJ||0); }
@@ -422,30 +474,46 @@ function byTime(a,b){ return (a.KSSJ||0)-(b.KSSJ||0); }
 // 周次下拉
 (function(){
   const sel = $('#weekSel');
+  if(DATA.term.startDate){
+    const before = document.createElement('option'); before.value='before'; before.textContent='未开学'; sel.appendChild(before);
+  }
   DATA.weeks.forEach(w=>{ const o=document.createElement('option'); o.value=w; o.textContent='第 '+w+' 周'; sel.appendChild(o); });
-  sel.value = DATA.defaultWeek;
+  if(DATA.term.startDate){
+    const after = document.createElement('option'); after.value='after'; after.textContent='已放假'; sel.appendChild(after);
+  }
+  const autoWeek = DATA.autoWeek ? currentWeekNumber() : null;
+  sel.value = autoWeek || DATA.defaultWeek;
   sel.addEventListener('change', render);
   $('#btnPrev').addEventListener('click', ()=>step(-1));
   $('#btnNext').addEventListener('click', ()=>step(1));
-  function step(d){ const cur=+sel.value; let n=cur+d; if(n<DATA.weeks[0])n=DATA.weeks[0]; if(n>DATA.weeks[DATA.weeks.length-1])n=DATA.weeks[DATA.weeks.length-1]; sel.value=n; render(); }
+  function step(d){
+    const cur=sel.value;
+    if(cur==='before' && d>0){ sel.value=DATA.weeks[0]; }
+    else if(cur==='after' && d<0){ sel.value=DATA.weeks[DATA.weeks.length-1]; }
+    else if(cur==='before' || cur==='after'){ return; }
+    else { let n=+cur+d; if(n<DATA.weeks[0])n=DATA.weeks[0]; if(n>DATA.weeks[DATA.weeks.length-1])n=DATA.weeks[DATA.weeks.length-1]; sel.value=n; }
+    render();
+  }
   $('#onlyToday').addEventListener('change', render);
 })();
 
 function render(){
-  const week = +$('#weekSel').value;
+  const selected = $('#weekSel').value;
+  const week = +selected;
+  const status = selected==='before' || selected==='after' ? selected : null;
   const onlyToday = $('#onlyToday').checked;
   const dayCols = DATA.weekdayOrder.filter(xq=>+xq>=1 && +xq<=5);
   // 本周有课的课程
-  const weekCourses = DATA.schedule.filter(c=>activeWeek(c, week) && +c.XQ>=1 && +c.XQ<=5);
-  $('#heroWeek').textContent = '第 '+week+' 周';
-  $('#heroWeekRange').textContent = weekRangeLabel(week);
-  renderToday(weekCourses, onlyToday);
+  const weekCourses = status ? [] : DATA.schedule.filter(c=>activeWeek(c, week) && +c.XQ>=1 && +c.XQ<=5);
+  $('#heroWeek').textContent = status==='before' ? '未开学' : status==='after' ? '已放假' : '第 '+week+' 周';
+  $('#heroWeekRange').textContent = weekRangeLabel(status || week);
+  renderToday(weekCourses, week, onlyToday);
   renderGrid(week, weekCourses, dayCols, onlyToday);
 }
 
-function renderToday(list, onlyToday){
+function renderToday(list, week, onlyToday){
   const box = $('#todayList');
-  const todayCourses = list.filter(c=>isToday(c.XQ)).sort(byTime);
+  const todayCourses = list.filter(c=>isToday(c.XQ, week)).sort(byTime);
   $('#cardToday').hidden = false;
   if(!todayCourses.length){ box.innerHTML = ''; return; }
   box.innerHTML = '';
@@ -483,7 +551,7 @@ function renderGrid(week, weekCourses, dayCols, onlyToday){
   // 先计算每天的并行轨道，避免同一时段的课程互相覆盖
   const placements = [];
   weekCourses.forEach(c=>{
-    if(onlyToday && !isToday(c.XQ)) return;
+    if(onlyToday && !isToday(c.XQ, week)) return;
     const rows = periods.filter(p=>+p.DM>=+c.KSJCDM && +p.DM<=+c.JSJCDM);
     const colIdx = dayCols.indexOf(c.XQ);
     if(!rows.length || colIdx<0) return;
