@@ -19,3 +19,6 @@ AGENTS.md
 .idea/
 .vscode/
 *.session.json
+# 部署脚本：往站点目录装东西、含服务器内部路径，不进公开仓库
+# （本机保留一份未跟踪的 deploy.sh，课表刷新仍然靠它）
+deploy.sh

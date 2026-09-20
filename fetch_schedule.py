@@ -45,10 +45,7 @@ LOGIN_URL = f"{IDS}/authserver/login?type=userNameLogin&service="
 GSAPP = f"{PORTAL}/gsapp/sys/wdkbapp"
 
 BASE_DIR = Path(__file__).resolve().parent
-# 教务账号口令不在代码目录里（这目录是 git 仓库），2026-09-17 拔到 /srv/private/app-data/。
-# 环境变量 SCHEDULE_CONFIG 可覆盖；deploy.sh 里没设，靠的就是这个默认值。
-CONFIG_FILE = Path(os.environ.get("SCHEDULE_CONFIG",
-                                  "/srv/private/app-data/xmu-class-schedule/config.json"))
+CONFIG_FILE = BASE_DIR / "config.json"
 OUTPUT_HTML = BASE_DIR / "schedule.html"
 
 # --------- 星期数据（与教务系统一致：1=周一 …… 7=周日） ---------
