@@ -415,13 +415,16 @@ function weekRangeLabel(week){
     return '开学日期：'+monday.getFullYear()+' 年 '+(monday.getMonth()+1)+' 月 '+monday.getDate()+' 日';
   }
   if(week==='after') return '本学期已结束';
-  monday.setDate(monday.getDate()+(week-1)*7);
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate()+6);
-  const left = monday.getFullYear()+' 年 '+(monday.getMonth()+1)+' 月 '+monday.getDate()+' 日';
-  const right = sunday.getFullYear()===monday.getFullYear()
-    ? (sunday.getMonth()+1)+' 月 '+sunday.getDate()+' 日'
-    : sunday.getFullYear()+' 年 '+(sunday.getMonth()+1)+' 月 '+sunday.getDate()+' 日';
+  // 1..5 列的日期不受周界影响，但「本周范围」要按教务的口径给：厦大的周次从周日
+  // 开始、周六结束（校历里每个学段都是整数个「周日→周六」），所以这里取
+  // 周日 ~ 周六，不是 周一 ~ 周日。
+  const firstDay = weekDate(week, 7);
+  const lastDay = weekDate(week, 6);
+  if(!firstDay || !lastDay) return '';
+  const left = firstDay.getFullYear()+' 年 '+(firstDay.getMonth()+1)+' 月 '+firstDay.getDate()+' 日';
+  const right = lastDay.getFullYear()===firstDay.getFullYear()
+    ? (lastDay.getMonth()+1)+' 月 '+lastDay.getDate()+' 日'
+    : lastDay.getFullYear()+' 年 '+(lastDay.getMonth()+1)+' 月 '+lastDay.getDate()+' 日';
   return left+' - '+right;
 }
 function currentWeekNumber(){
@@ -432,8 +435,10 @@ function currentWeekNumber(){
   today.setHours(0,0,0,0);
   start.setHours(0,0,0,0);
   const elapsed = Math.floor((today-start)/86400000);
-  if(elapsed < 0) return 'before';
-  const raw = Math.floor(elapsed/7)+1;
+  // 厦大的周次从周日开始算，所以周日是下一周的第 1 天：先把天数 +1（相当于
+  // 把锚点从「第 1 周周一」往前挪到「第 1 周周日」），再整除。
+  const raw = Math.floor((elapsed+1)/7)+1;
+  if(raw < 1) return 'before';
   if(raw > DATA.weeks[DATA.weeks.length-1]) return 'after';
   return Math.max(raw, DATA.weeks[0]);
 }
@@ -459,13 +464,11 @@ function isToday(xq, week){
   const d = new Date();
   const iso = (d.getDay()===0 ? 7 : d.getDay()); // 周日=7
   if(DATA.term.startDate){
-    const monday = new Date(DATA.term.startDate+'T00:00:00');
-    if(Number.isNaN(monday.getTime())) return false;
-    monday.setDate(monday.getDate()+(week-1)*7);
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate()+6);
+    // 直接比「这一周里 XQ 对应的真实日期」，周日的归属交给 weekDate() 定
+    const wd = weekDate(week, +xq);
+    if(!wd) return false;
     d.setHours(0,0,0,0);
-    if(d<monday || d>sunday) return false;
+    return wd.getTime() === d.getTime();
   }
   return (xq==iso);
 }
@@ -473,7 +476,9 @@ function weekDate(week, xq){
   if(!DATA.term.startDate || !Number.isFinite(week)) return null;
   const d = new Date(DATA.term.startDate+'T00:00:00');
   if(Number.isNaN(d.getTime())) return null;
-  d.setDate(d.getDate()+(week-1)*7+(xq-1));
+  // startDate = 第 1 周里的周一；xq 1=周一 …… 7=周日。厦大的周次从周日开始，
+  // 所以周日属于「下一周」而不是「上一周的末尾」，这里把它摆回本周第 1 天（-1 天）。
+  d.setDate(d.getDate()+(week-1)*7+(xq===7 ? -1 : xq-1));
   return d;
 }
 function dateNum(d){ return (d.getMonth()+1)+'/'+d.getDate(); }
