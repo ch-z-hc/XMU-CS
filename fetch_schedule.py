@@ -422,7 +422,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 const DATA = __DATA__;
 const $ = (s)=>document.querySelector(s);
 const nameMap = {}; DATA.dayShort && Object.entries(DATA.dayShort).forEach(([k,v])=>nameMap[+k]=v);
-function prettyText(s){ return String(s||'').replace(/([\u4e00-\u9fff])([A-Za-z0-9])/g,'$1 $2').replace(/([A-Za-z0-9])([\u4e00-\u9fff])/g,'$1 $2'); }
+function prettyText(s){ return String(s||'').replace(/([\u4e00-\u9fff])\s*,\s*(?=[\u4e00-\u9fff])/g,'$1，').replace(/([\u4e00-\u9fff])([A-Za-z0-9])/g,'$1 $2').replace(/([A-Za-z0-9])([\u4e00-\u9fff])/g,'$1 $2'); }
 function dateLabel(d){
   const day = DATA.dayShort[d.getDay()===0?7:d.getDay()] || '';
   return d.getFullYear()+' 年 '+(d.getMonth()+1)+' 月 '+d.getDate()+' 日 · '+day;
