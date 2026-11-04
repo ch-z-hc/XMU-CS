@@ -3,6 +3,7 @@ config.json
 
 # 生成的个人课表（内含姓名、课程、教师和教室）
 schedule.html
+!templates/schedule.html
 
 # Python 临时文件与本地环境
 __pycache__/

@@ -3,7 +3,16 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>厦大课表示例</title>
+<title>我的课表</title>
+<meta name="theme-color" content="#1769aa"/>
+<meta name="application-name" content="厦大课表"/>
+<meta name="apple-mobile-web-app-title" content="课表"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="manifest" href="../manifest.json?v=20260901"/>
+<link rel="icon" type="image/png" href="../assets/favicon.png?v=20260901"/>
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png?v=20260901"/>
 <style>
   :root{--bg:#f2f5f9;--card:#fff;--ink:#182334;--muted:#718096;--line:#e4eaf1;--accent:#1769aa;--accent-dark:#0b3764;--accent-soft:#e9f3fb;--today:#df5a54;--shadow:0 18px 50px rgba(27,55,90,.08)}
   *{box-sizing:border-box}
@@ -23,11 +32,13 @@
   .grid-scroll{overflow-x:auto;padding:1px 1px 6px;scrollbar-color:#c5d1dd transparent;scrollbar-width:thin}table.kb{width:100%;min-width:860px;border-spacing:0;border-collapse:separate;background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden;font-size:13px}table.kb th,table.kb td{padding:0;vertical-align:top;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}table.kb tr:last-child td{border-bottom:0}table.kb th:last-child,table.kb td:last-child{border-right:0}table.kb thead th{background:#f6f8fb;position:sticky;top:0;z-index:2}table.kb th.daycol{font-weight:700;padding:8px 6px;text-align:center}table.kb th.daycol .dn{display:block;font-size:13px;line-height:1.3}table.kb th.daycol .dd{display:block;margin-top:1px;color:var(--muted);font-size:11px;font-weight:650;line-height:1.2}table.kb th.daycol.today{position:relative;color:var(--today)}table.kb th.daycol.today .dd{color:var(--today)}table.kb th.daycol.today::after{content:"";position:absolute;left:50%;bottom:5px;width:4px;height:4px;border-radius:50%;background:var(--today);transform:translateX(-50%)}table.kb th.timecol{width:92px;min-width:92px;color:var(--muted);font-size:11px;font-weight:650;padding:10px 6px;text-align:center;white-space:nowrap}table.kb th.timecol .tc-short{display:none}table.kb td.timecell{width:92px;color:var(--muted);font-size:11px;text-align:center;background:#f9fafc;vertical-align:middle}table.kb td.timecell div:first-child{color:#455368;font-size:12px;font-weight:750}table.kb td.timecell .tm{display:flex;justify-content:center;align-items:center;gap:2px;line-height:1.35}table.kb td.timecell .tm .dash{display:block;flex:none;width:8px;height:1px;font-size:0;line-height:0;background:currentColor;opacity:.55;border-radius:1px}table.kb td.cell{height:68px;position:relative;padding:2px;background:#fff}td.cell.today{background:rgba(223,90,84,.035)}
   .blk{position:absolute;left:2px;right:2px;display:flex;align-items:center;justify-content:center;padding:6px;background:var(--course-bg);border:1px solid var(--course-border);border-left:3px solid var(--course);border-radius:7px;font-size:12px;overflow:hidden;cursor:pointer;box-shadow:0 2px 5px rgba(28,45,66,.035);transition:transform .16s ease,box-shadow .16s ease}.blk:hover,.blk:focus-visible{transform:translateY(-1px);box-shadow:0 6px 14px rgba(28,45,66,.12);outline:none}.blk .t1{display:block;overflow:hidden;color:var(--course-ink);font-weight:750;line-height:1.3;text-align:center;word-break:normal;overflow-wrap:anywhere}
   .tc1{--course:#3977c3;--course-bg:#edf4fc;--course-border:#d5e5f6;--course-ink:#245489;--course-muted:#5c7796}.tc2{--course:#3b9276;--course-bg:#edf8f4;--course-border:#d3ede4;--course-ink:#286b56;--course-muted:#5a7f72}.tc3{--course:#ca7b3a;--course-bg:#fff5ea;--course-border:#f4dfc7;--course-ink:#92531f;--course-muted:#947356}.tc4{--course:#8d67ba;--course-bg:#f6f0fb;--course-border:#e6d8f2;--course-ink:#66438f;--course-muted:#7d6a91}.tc5{--course:#348c9d;--course-bg:#ecf8fa;--course-border:#d0ebef;--course-ink:#286a76;--course-muted:#597e85}.tc6{--course:#c85e67;--course-bg:#fff0f1;--course-border:#f4d6d9;--course-ink:#93434a;--course-muted:#93686c}.tc7{--course:#6575b9;--course-bg:#f0f2fb;--course-border:#dce1f5;--course-ink:#45558f;--course-muted:#687399}
-  body.modal-open{overflow:hidden}.modal-backdrop{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(8,29,53,.48);opacity:0;visibility:hidden;transition:opacity .18s ease,visibility .18s ease}.modal-backdrop.open{opacity:1;visibility:visible}.course-modal{position:relative;width:min(100%,460px);padding:27px 28px 25px;background:#fff;border:1px solid rgba(224,231,239,.95);border-radius:24px;box-shadow:0 24px 70px rgba(8,29,53,.25);transform:translateY(10px) scale(.98);transition:transform .2s ease}.modal-backdrop.open .course-modal{transform:none}.modal-close{position:absolute;right:15px;top:14px;width:32px;height:32px;padding:0;border:0;border-radius:50%;color:#718096;background:#f2f5f8;font-size:22px;line-height:1}.modal-close:hover{color:var(--ink);background:#e8eef4}.modal-kicker{color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.16em}.modal-title{margin:7px 38px 3px 0;color:var(--ink);font-size:23px;line-height:1.3}.modal-class{min-height:18px;color:var(--muted);font-size:12px}.modal-details{display:grid;gap:9px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.detail-row{display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:start;font-size:13px}.detail-row span{color:var(--muted)}.detail-row b{color:var(--ink);font-weight:650;word-break:normal;overflow-wrap:anywhere}.modal-hint{margin:20px 0 0;color:#93a0af;font-size:11px}
+  body.modal-open{overflow:hidden}.modal-backdrop{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(8,29,53,.48);opacity:0;visibility:hidden;transition:opacity .18s ease}.modal-backdrop.open{opacity:1;visibility:visible}.course-modal{position:relative;width:min(100%,460px);padding:27px 28px 25px;background:#fff;border:1px solid rgba(224,231,239,.95);border-radius:24px;box-shadow:0 24px 70px rgba(8,29,53,.25);transform:translateY(10px) scale(.98);transition:transform .2s ease}.modal-backdrop.open .course-modal{transform:none}.modal-close{position:absolute;right:15px;top:14px;width:32px;height:32px;padding:0;border:0;border-radius:50%;color:#718096;background:#f2f5f8;font-size:22px;line-height:1}.modal-close:hover{color:var(--ink);background:#e8eef4}.modal-kicker{color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.16em}.modal-title{margin:7px 38px 3px 0;color:var(--ink);font-size:23px;line-height:1.3}.modal-class{min-height:18px;color:var(--muted);font-size:12px}.modal-details{display:grid;gap:9px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.detail-row{display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:start;font-size:13px}.detail-row span{color:var(--muted)}.detail-row b{color:var(--ink);font-weight:650;word-break:normal;overflow-wrap:anywhere}.modal-hint{margin:20px 0 0;color:#93a0af;font-size:11px}
   @media (max-width:800px){.wrap{padding:16px 12px 48px}.hero{border-radius:22px;padding:20px 20px 30px}.hero-main{margin-top:8px}.toolbar{align-items:flex-end;flex-wrap:wrap;gap:12px}.control-copy{width:100%}.toggle{margin-left:auto}}
 @media (max-width:560px){.hero-main{display:block;margin-top:8px}.hero h1{font-size:34px}.week-orb{display:flex;align-items:center;gap:8px;min-width:0;margin-top:22px;padding:12px 14px}.week-orb span{display:none}.week-orb strong{font-size:18px;margin:0}.week-orb small{margin-left:auto;font-size:11px;text-align:right;white-space:normal}.toolbar{padding:14px}.control-copy{display:none}.week-switch{flex:1}.week-switch select{flex:1}.toggle{width:100%;justify-content:flex-end}.card{padding:17px 14px;border-radius:18px}.lesson{gap:10px;padding-right:10px}.lesson .time{min-width:76px;padding:0 11px}.lesson .class-name{display:none}.section-meta{font-size:11px}.modal-backdrop{align-items:end;padding:12px}.course-modal{width:100%;padding:24px 20px 22px;border-radius:24px 24px 15px 15px}.modal-title{font-size:21px}}
   @media (max-width:560px){.wrap{padding-left:8px;padding-right:8px}.hero{padding:18px 16px 24px}.hero h1{font-size:31px}.hero-name{font-size:14px}.card{padding:15px 10px}.grid-scroll{overflow-x:hidden}.grid-scroll table.kb{min-width:0;table-layout:fixed;font-size:11px}.grid-scroll table.kb th.timecol,.grid-scroll table.kb td.timecell{width:54px;min-width:54px}.grid-scroll table.kb th.timecol .tc-long{display:none}.grid-scroll table.kb th.timecol .tc-short{display:inline}.grid-scroll table.kb th.daycol{padding-left:2px;padding-right:2px}.grid-scroll table.kb th.daycol .dn{font-size:11px}.grid-scroll table.kb th.daycol .dd{font-size:10px}.grid-scroll table.kb td.timecell div{font-size:10px}.grid-scroll table.kb td.timecell .tm{flex-direction:column;align-items:center;line-height:1.25}.grid-scroll .blk{padding:5px 4px;font-size:10px;border-left-width:2px}.grid-scroll .blk .t1{line-height:1.2}.section-head h2{font-size:17px}.lesson .name{font-size:14px}}
-  @media (prefers-reduced-motion:reduce){button,.switch,.switch::after,.lesson{transition:none}}
+  @media (prefers-reduced-motion:reduce){button,.switch,.switch::after,.lesson,.modal-backdrop,.course-modal{transition:none}}
+  button:disabled,select:disabled{opacity:.55;cursor:default}
+  .grid-scroll.single-day table.kb{min-width:0;table-layout:fixed}.grid-scroll.single-day .blk{font-size:14px;padding:10px}.grid-scroll.single-day .blk .t1{line-height:1.5}
   pre.json{display:none}
 </style>
 </head>
@@ -82,8 +93,7 @@
 </div>
 
 <script>
-const RealDate = Date; window.Date = class extends RealDate { constructor(...args) { super(...(args.length ? args : ['2026-09-23T10:30:00+08:00'])); } static now() { return new RealDate('2026-09-23T10:30:00+08:00').getTime(); } };
-const DATA = {"student":{"name":"示例同学"},"term":{"code":"20261","name":"2026-2027 学年秋季学期","startDate":"2026-09-07"},"defaultWeek":3,"weeks":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],"periods":[{"JCFADM":"01","DM":"1","MC":"第1节","YWMC":"Class 1","KSSJ":800,"JSSJ":845,"PX":1},{"JCFADM":"01","DM":"2","MC":"第2节","YWMC":"Class 2","KSSJ":855,"JSSJ":940,"PX":2},{"JCFADM":"01","DM":"3","MC":"第3节","YWMC":"Class 3","KSSJ":1010,"JSSJ":1055,"PX":3},{"JCFADM":"01","DM":"4","MC":"第4节","YWMC":"Class 4","KSSJ":1105,"JSSJ":1150,"PX":4},{"JCFADM":"01","DM":"5","MC":"第5节","YWMC":"Class 5","KSSJ":1430,"JSSJ":1515,"PX":5},{"JCFADM":"01","DM":"6","MC":"第6节","YWMC":"Class 6","KSSJ":1525,"JSSJ":1610,"PX":6},{"JCFADM":"01","DM":"7","MC":"第7节","YWMC":"Class 7","KSSJ":1640,"JSSJ":1725,"PX":7},{"JCFADM":"01","DM":"8","MC":"第8节","YWMC":"Class 8","KSSJ":1735,"JSSJ":1820,"PX":8},{"JCFADM":"01","DM":"9","MC":"第9节","YWMC":"Class 9","KSSJ":1910,"JSSJ":1955,"PX":9},{"JCFADM":"01","DM":"10","MC":"第10节","YWMC":"Class 10","KSSJ":2005,"JSSJ":2050,"PX":10},{"JCFADM":"01","DM":"11","MC":"第11节","YWMC":"Class 11","KSSJ":2100,"JSSJ":2145,"PX":11}],"weekdayOrder":[1,2,3,4,5,6,7],"schedule":[{"KCDM":"DEMO01","KCMC":"高等数学","BJMC":"示例 01","XQ":1,"ZCBH":"111111111111111100000000000000","ZCMC":"1-16 周","KSJCDM":1,"JSJCDM":2,"KSSJ":800,"JSSJ":940,"JSXM":"陈老师","JASMC":"嘉庚楼 101"},{"KCDM":"DEMO02","KCMC":"大学英语","BJMC":"示例 01","XQ":1,"ZCBH":"111111111111111100000000000000","ZCMC":"1-16 周","KSJCDM":5,"JSJCDM":6,"KSSJ":1430,"JSSJ":1610,"JSXM":"林老师","JASMC":"南强楼 205"},{"KCDM":"DEMO03","KCMC":"数据结构与算法","BJMC":"示例 01","XQ":2,"ZCBH":"111111111111111100000000000000","ZCMC":"1-16 周","KSJCDM":3,"JSJCDM":4,"KSSJ":1010,"JSSJ":1150,"JSXM":"王老师","JASMC":"海韵教学楼 301"},{"KCDM":"DEMO04","KCMC":"体育","BJMC":"示例 01","XQ":2,"ZCBH":"111111111111111100000000000000","ZCMC":"1-16 周","KSJCDM":7,"JSJCDM":8,"KSSJ":1640,"JSSJ":1820,"JSXM":"周老师","JASMC":"演武田径场"},{"KCDM":"DEMO05","KCMC":"计算机网络","BJMC":"示例 01","XQ":3,"ZCBH":"111111111111111100000000000000","ZCMC":"1-16 周","KSJCDM":1,"JSJCDM":2,"KSSJ":800,"JSSJ":940,"JSXM":"李老师","JASMC":"海韵教学楼 402"},{"KCDM":"DEMO06","KCMC":"人工智能导论","BJMC":"示例 01","XQ":3,"ZCBH":"111111111111111100000000000000","ZCMC":"1-16 周","KSJCDM":5,"JSJCDM":6,"KSSJ":1430,"JSSJ":1610,"JSXM":"许老师","JASMC":"翔安文宣楼 B201"},{"KCDM":"DEMO07","KCMC":"数据库系统","BJMC":"示例 01","XQ":4,"ZCBH":"111111111111111100000000000000","ZCMC":"1-16 周","KSJCDM":3,"JSJCDM":4,"KSSJ":1010,"JSSJ":1150,"JSXM":"赵老师","JASMC":"嘉庚楼 307"},{"KCDM":"DEMO08","KCMC":"学术写作","BJMC":"示例 01","XQ":4,"ZCBH":"111111111111111100000000000000","ZCMC":"1-16 周","KSJCDM":9,"JSJCDM":10,"KSSJ":1910,"JSSJ":2050,"JSXM":"吴老师","JASMC":"南强楼 118"},{"KCDM":"DEMO09","KCMC":"软件工程实践","BJMC":"示例 01","XQ":5,"ZCBH":"111111111111111100000000000000","ZCMC":"1-16 周","KSJCDM":1,"JSJCDM":4,"KSSJ":800,"JSSJ":1150,"JSXM":"郑老师","JASMC":"海韵实验楼 204"},{"KCDM":"DEMO10","KCMC":"形势与政策","BJMC":"示例 01","XQ":5,"ZCBH":"111111111111111100000000000000","ZCMC":"1-16 周","KSJCDM":7,"JSJCDM":8,"JSXM":"黄老师","JASMC":"建南大会堂"}],"dayNames":{"1":"星期一","2":"星期二","3":"星期三","4":"星期四","5":"星期五","6":"星期六","7":"星期日"},"dayShort":{"1":"周一","2":"周二","3":"周三","4":"周四","5":"周五","6":"周六","7":"周日"}};
+const DATA = {"student": {"name": "示例同学"}, "term": {"code": "20261", "name": "2026-2027 学年秋季学期", "startDate": "2026-09-07"}, "defaultWeek": 3, "weeks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "periods": [{"JCFADM": "01", "DM": "1", "MC": "第1节", "YWMC": "Class 1", "KSSJ": 800, "JSSJ": 845, "PX": 1}, {"JCFADM": "01", "DM": "2", "MC": "第2节", "YWMC": "Class 2", "KSSJ": 855, "JSSJ": 940, "PX": 2}, {"JCFADM": "01", "DM": "3", "MC": "第3节", "YWMC": "Class 3", "KSSJ": 1010, "JSSJ": 1055, "PX": 3}, {"JCFADM": "01", "DM": "4", "MC": "第4节", "YWMC": "Class 4", "KSSJ": 1105, "JSSJ": 1150, "PX": 4}, {"JCFADM": "01", "DM": "5", "MC": "第5节", "YWMC": "Class 5", "KSSJ": 1430, "JSSJ": 1515, "PX": 5}, {"JCFADM": "01", "DM": "6", "MC": "第6节", "YWMC": "Class 6", "KSSJ": 1525, "JSSJ": 1610, "PX": 6}, {"JCFADM": "01", "DM": "7", "MC": "第7节", "YWMC": "Class 7", "KSSJ": 1640, "JSSJ": 1725, "PX": 7}, {"JCFADM": "01", "DM": "8", "MC": "第8节", "YWMC": "Class 8", "KSSJ": 1735, "JSSJ": 1820, "PX": 8}, {"JCFADM": "01", "DM": "9", "MC": "第9节", "YWMC": "Class 9", "KSSJ": 1910, "JSSJ": 1955, "PX": 9}, {"JCFADM": "01", "DM": "10", "MC": "第10节", "YWMC": "Class 10", "KSSJ": 2005, "JSSJ": 2050, "PX": 10}, {"JCFADM": "01", "DM": "11", "MC": "第11节", "YWMC": "Class 11", "KSSJ": 2100, "JSSJ": 2145, "PX": 11}], "weekdayOrder": [1, 2, 3, 4, 5, 6, 7], "schedule": [{"KCDM": "DEMO01", "KCMC": "高等数学", "BJMC": "示例 01", "XQ": 1, "ZCBH": "111111111111111100000000000000", "ZCMC": "1-16 周", "KSJCDM": 1, "JSJCDM": 2, "KSSJ": 800, "JSSJ": 940, "JSXM": "陈老师", "JASMC": "嘉庚楼 101"}, {"KCDM": "DEMO02", "KCMC": "大学英语", "BJMC": "示例 01", "XQ": 1, "ZCBH": "111111111111111100000000000000", "ZCMC": "1-16 周", "KSJCDM": 5, "JSJCDM": 6, "KSSJ": 1430, "JSSJ": 1610, "JSXM": "林老师", "JASMC": "南强楼 205"}, {"KCDM": "DEMO03", "KCMC": "数据结构与算法", "BJMC": "示例 01", "XQ": 2, "ZCBH": "111111111111111100000000000000", "ZCMC": "1-16 周", "KSJCDM": 3, "JSJCDM": 4, "KSSJ": 1010, "JSSJ": 1150, "JSXM": "王老师", "JASMC": "海韵教学楼 301"}, {"KCDM": "DEMO04", "KCMC": "体育", "BJMC": "示例 01", "XQ": 2, "ZCBH": "111111111111111100000000000000", "ZCMC": "1-16 周", "KSJCDM": 7, "JSJCDM": 8, "KSSJ": 1640, "JSSJ": 1820, "JSXM": "周老师", "JASMC": "演武田径场"}, {"KCDM": "DEMO05", "KCMC": "计算机网络", "BJMC": "示例 01", "XQ": 3, "ZCBH": "111111111111111100000000000000", "ZCMC": "1-16 周", "KSJCDM": 1, "JSJCDM": 2, "KSSJ": 800, "JSSJ": 940, "JSXM": "李老师", "JASMC": "海韵教学楼 402"}, {"KCDM": "DEMO06", "KCMC": "人工智能导论", "BJMC": "示例 01", "XQ": 3, "ZCBH": "111111111111111100000000000000", "ZCMC": "1-16 周", "KSJCDM": 5, "JSJCDM": 6, "KSSJ": 1430, "JSSJ": 1610, "JSXM": "许老师", "JASMC": "翔安文宣楼 B201"}, {"KCDM": "DEMO07", "KCMC": "数据库系统", "BJMC": "示例 01", "XQ": 4, "ZCBH": "111111111111111100000000000000", "ZCMC": "1-16 周", "KSJCDM": 3, "JSJCDM": 4, "KSSJ": 1010, "JSSJ": 1150, "JSXM": "赵老师", "JASMC": "嘉庚楼 307"}, {"KCDM": "DEMO08", "KCMC": "学术写作", "BJMC": "示例 01", "XQ": 4, "ZCBH": "111111111111111100000000000000", "ZCMC": "1-16 周", "KSJCDM": 9, "JSJCDM": 10, "KSSJ": 1910, "JSSJ": 2050, "JSXM": "吴老师", "JASMC": "南强楼 118"}, {"KCDM": "DEMO09", "KCMC": "软件工程实践", "BJMC": "示例 01", "XQ": 5, "ZCBH": "111111111111111100000000000000", "ZCMC": "1-16 周", "KSJCDM": 1, "JSJCDM": 4, "KSSJ": 800, "JSSJ": 1150, "JSXM": "郑老师", "JASMC": "海韵实验楼 204"}, {"KCDM": "DEMO10", "KCMC": "形势与政策", "BJMC": "示例 01", "XQ": 5, "ZCBH": "111111111111111100000000000000", "ZCMC": "1-16 周", "KSJCDM": 7, "JSJCDM": 8, "JSXM": "黄老师", "JASMC": "建南大会堂"}], "dayNames": {"1": "星期一", "2": "星期二", "3": "星期三", "4": "星期四", "5": "星期五", "6": "星期六", "7": "星期日"}, "dayShort": {"1": "周一", "2": "周二", "3": "周三", "4": "周四", "5": "周五", "6": "周六", "7": "周日"}, "autoWeek": true};
 const $ = (s)=>document.querySelector(s);
 const nameMap = {}; DATA.dayShort && Object.entries(DATA.dayShort).forEach(([k,v])=>nameMap[+k]=v);
 function prettyText(s){ return String(s||'').replace(/([\u4e00-\u9fff])\s*,\s*(?=[\u4e00-\u9fff])/g,'$1，').replace(/([\u4e00-\u9fff])([A-Za-z0-9])/g,'$1 $2').replace(/([A-Za-z0-9])([\u4e00-\u9fff])/g,'$1 $2'); }
@@ -197,7 +207,13 @@ function byTime(a,b){ return (a.KSSJ||0)-(b.KSSJ||0); }
     }
     render();
   }
-  $('#onlyToday').addEventListener('change', render);
+  $('#onlyToday').addEventListener('change', ()=>{
+    if($('#onlyToday').checked){
+      const current = currentWeekNumber();
+      if(current !== null) sel.value = current;
+    }
+    render();
+  });
 })();
 
 function render(){
@@ -205,29 +221,37 @@ function render(){
   const week = +selected;
   const status = selected==='before' || selected==='after' ? selected : null;
   const onlyToday = $('#onlyToday').checked;
-  const dayCols = DATA.weekdayOrder.filter(xq=>+xq>=1 && +xq<=5);
+  const todayDay = new Date().getDay() || 7;
+  const dayCols = onlyToday ? [todayDay] : DATA.weekdayOrder.filter(xq=>+xq>=1 && +xq<=5);
   // 本周有课的课程
-  const weekCourses = status ? [] : DATA.schedule.filter(c=>activeWeek(c, week) && +c.XQ>=1 && +c.XQ<=5);
+  const weekCourses = status ? [] : DATA.schedule.filter(c=>activeWeek(c, week) && (onlyToday || (+c.XQ>=1 && +c.XQ<=5)));
+  document.querySelector('.grid-scroll').classList.toggle('single-day', onlyToday);
+  ['weekSel', 'btnPrev', 'btnNext'].forEach(id=>{ document.getElementById(id).disabled = onlyToday; });
   $('#heroWeek').textContent = status==='before' ? '未开学' : status==='after' ? '已放假' : '第 '+week+' 周';
   $('#heroWeekRange').textContent = weekRangeLabel(status || week);
-  renderToday(weekCourses, week, onlyToday);
+  renderToday(weekCourses, week, status);
   renderGrid(week, weekCourses, dayCols, onlyToday);
 }
 
-function renderToday(list, week, onlyToday){
+function renderToday(list, week, status){
   const box = $('#todayList');
   const todayCourses = list.filter(c=>isToday(c.XQ, week)).sort(byTime);
   $('#cardToday').hidden = false;
-  if(!todayCourses.length){ box.innerHTML = ''; return; }
+  if(!todayCourses.length){
+    const text = status === 'before' ? '尚未开学' : status === 'after' ? '本学期已结束' :
+      DATA.term.startDate && currentWeekNumber() !== week ? '当前查看的周次不包含今天' : '今天没有课程';
+    box.innerHTML = '<p class="empty" role="status">'+text+'</p>';
+    return;
+  }
   box.innerHTML = '';
   todayCourses.forEach(c=>{
     const weeks = c.ZCMC || '';
     const div = document.createElement('div'); div.className='lesson';
     const key = c.KCDM+'-'+c.BJMC;
     const meta = weeks ? '<span>'+esc(prettyText(weeks))+'</span>' : '';
-    div.innerHTML = '<div class="time"><b>'+fmt(c.KSSJ)+'</b><span>'+fmt(c.JSSJ)+'</span></div>'+ 
-      '<div class="info"><div class="name">'+esc(prettyText(c.KCMC||''))+(c.BJMC?' <span class="class-name">('+esc(prettyText(c.BJMC))+')</span>':'')+'</div>'+ 
-      '<div class="meta2">'+meta+'</div></div>'+ 
+    div.innerHTML = '<div class="time"><b>'+fmt(c.KSSJ)+'</b><span>'+fmt(c.JSSJ)+'</span></div>'+
+      '<div class="info"><div class="name">'+esc(prettyText(c.KCMC||''))+(c.BJMC?' <span class="class-name">('+esc(prettyText(c.BJMC))+')</span>':'')+'</div>'+
+      '<div class="meta2">'+meta+'</div></div>'+
       '<div class="color-strip '+courseColor[key]+'"></div>';
     bindCourseTrigger(div,c);
     box.appendChild(div);
@@ -262,7 +286,7 @@ function renderGrid(week, weekCourses, dayCols, onlyToday){
   weekCourses.forEach(c=>{
     if(onlyToday && !isToday(c.XQ, week)) return;
     const rows = periods.filter(p=>+p.DM>=+c.KSJCDM && +p.DM<=+c.JSJCDM);
-    const colIdx = cols.findIndex(col=>col.xq===c.XQ);
+    const colIdx = cols.findIndex(col=>+col.xq===+c.XQ);
     if(!rows.length || colIdx<0) return;
     placements.push({c,rowIdx:periods.indexOf(rows[0]),span:rows.length,colIdx});
   });
@@ -322,7 +346,10 @@ function bindCourseTrigger(el,c){
   el.addEventListener('keydown',activate);
 }
 
+let courseTrigger = null;
+
 function openCourse(c){
+  courseTrigger = document.activeElement;
   const modal = $('#courseModal');
   $('#modalTitle').textContent = prettyText(c.KCMC || '课程详情');
   $('#modalClass').textContent = c.BJMC ? '班级：'+prettyText(c.BJMC) : '';
@@ -336,6 +363,7 @@ function openCourse(c){
   modal.classList.add('open');
   modal.setAttribute('aria-hidden','false');
   document.body.classList.add('modal-open');
+  document.querySelector('.wrap').inert = true;
   $('#modalClose').focus();
 }
 
@@ -344,11 +372,18 @@ function closeCourse(){
   modal.classList.remove('open');
   modal.setAttribute('aria-hidden','true');
   document.body.classList.remove('modal-open');
+  document.querySelector('.wrap').inert = false;
+  if(courseTrigger?.isConnected) courseTrigger.focus();
+  courseTrigger = null;
 }
 
 $('#modalClose').addEventListener('click', closeCourse);
 $('#courseModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeCourse(); });
-document.addEventListener('keydown', e=>{ if(e.key==='Escape' && $('#courseModal').classList.contains('open')) closeCourse(); });
+document.addEventListener('keydown', e=>{
+  if(!$('#courseModal').classList.contains('open')) return;
+  if(e.key==='Escape'){ e.preventDefault(); closeCourse(); }
+  else if(e.key==='Tab'){ e.preventDefault(); $('#modalClose').focus(); }
+});
 
 // 顶部信息
 (function(){

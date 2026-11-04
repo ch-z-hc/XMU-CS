@@ -8,7 +8,7 @@
 - 周一至周五课表
 - 周次切换
 - 点击课程查看教师、教室、班级、周次和时间
-- 手机端自适应布局
+- 手机端自适应布局，可切换为宽列的今日视图
 
 ## 页面示例
 
@@ -90,6 +90,20 @@ python fetch_schedule.py --out out/my.html       # 指定输出路径
 ```bash
 python3 tools/make_icons.py
 ```
+
+## 离线检查与界面维护
+
+页面模板在 `templates/schedule.html`；修改后，生成的课表仍是单个 HTML 文件。模板必须与 Python 脚本一起保留。
+
+```sh
+node test/week.mjs
+python test/build_html.py
+python tools/build_demo.py
+```
+
+浏览器回归使用 Playwright：安装后运行 `node test/ui.cjs`，或通过 `PLAYWRIGHT_MODULE` 指定现有安装路径。CI 会检查 320 / 390 / 768 / 1440 像素视口、单日模式与弹窗键盘操作。所有课程均为模拟数据。
+
+周次回归覆盖开学前、学期内、学期后及周日边界。演示页面由同一模板和 `docs/schedule-demo.json` 中的模拟数据生成，不读取个人配置或访问教务。
 
 ## 工作原理
 
