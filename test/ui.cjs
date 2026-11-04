@@ -28,6 +28,7 @@ const root = path.resolve(__dirname, '..');
       await page.locator('#onlyToday').check({ force: true });
       assert.equal(await page.locator('#weekSel').inputValue(), '9');
       assert.equal(await page.locator('th.daycol').count(), 1);
+      assert.equal(await page.locator('#gridKicker').innerText(), 'DAILY OVERVIEW');
       assert(await page.locator('#weekSel').isDisabled());
       const course = page.locator('.blk').first();
       assert(await course.evaluate(element => element.clientWidth) > 150);
@@ -46,6 +47,7 @@ const root = path.resolve(__dirname, '..');
       assert(await course.evaluate(element => element === document.activeElement));
       await page.locator('#onlyToday').uncheck({ force: true });
       assert.equal(await page.locator('th.daycol').count(), 5);
+      assert.equal(await page.locator('#gridKicker').innerText(), 'WEEKLY OVERVIEW');
       assert.equal(await page.locator('#weekSel').isDisabled(), false);
       console.log('PASS ' + width + 'px: week/empty states, daily column, modal keyboard and focus return');
     }

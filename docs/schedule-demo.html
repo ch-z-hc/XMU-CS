@@ -75,7 +75,7 @@
 
   <section class="card">
     <div class="section-head">
-      <span class="section-kicker">WEEKLY OVERVIEW</span>
+      <span class="section-kicker" id="gridKicker">WEEKLY OVERVIEW</span>
     </div>
     <div class="grid-scroll"><table class="kb" id="kb"></table></div>
   </section>
@@ -226,6 +226,7 @@ function render(){
   // 本周有课的课程
   const weekCourses = status ? [] : DATA.schedule.filter(c=>activeWeek(c, week) && (onlyToday || (+c.XQ>=1 && +c.XQ<=5)));
   document.querySelector('.grid-scroll').classList.toggle('single-day', onlyToday);
+  $('#gridKicker').textContent = onlyToday ? 'DAILY OVERVIEW' : 'WEEKLY OVERVIEW';
   ['weekSel', 'btnPrev', 'btnNext'].forEach(id=>{ document.getElementById(id).disabled = onlyToday; });
   $('#heroWeek').textContent = status==='before' ? '未开学' : status==='after' ? '已放假' : '第 '+week+' 周';
   $('#heroWeekRange').textContent = weekRangeLabel(status || week);
