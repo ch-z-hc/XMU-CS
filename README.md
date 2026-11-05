@@ -1,124 +1,45 @@
-# 厦大课表
+# XMU-CS
 
-使用学号 / 工号和密码登录厦门大学统一身份认证，拉取当前学期课表，并生成一个自包含的 HTML 页面。
+厦门大学课表查询工具。使用学号或工号登录统一身份认证，获取学期课表并生成网页，方便在电脑和手机上查看。
 
-页面包含：
+## 功能
 
-- 今日课程
-- 周一至周五课表
-- 周次切换
-- 点击课程查看教师、教室、班级、周次和时间
-- 手机端自适应布局，可切换为宽列的今日视图
+- 查看今日课程和周一至周五的课表。
+- 切换周次，按当前日期自动定位到本周。
+- 点击课程查看教师、教室、班级、周次和上课时间。
+- 手机端可切换为单列的今日视图，包含当天的周末课程。
+- 课表数据保存在生成的页面中，查看时无需重新登录教务系统；更新课表需重新运行脚本。
 
 ## 页面示例
 
-下面是生成页面的脱敏预览（示例数据仅用于展示界面）：
+以下页面使用模拟数据，中文为霞鹜文楷，英文和数字为 Maple Mono。
 
 ![课表页面示例](docs/schedule-demo.png)
 
-也可以直接打开 [示例页面](docs/schedule-demo.html) 或 [示例图原文件](docs/schedule-demo.png) 查看大图。
-
-## 安装依赖
-
-```bash
-pip install -r requirements.txt
-```
-
-## 配置
-
-复制示例配置并填写账号：
-
-```bash
-copy config.example.json config.json
-```
-
-`config.json` 含密码，已被 `.gitignore` 忽略，请勿提交到公开仓库。
-
-如果教务接口没有返回学期首周日期，可以在配置中手动填写 `start_date`（格式 `YYYY-MM-DD`）。例如本学期下周一开学：
-
-```json
-{
-  "term": "",
-  "week": "",
-  "start_date": "2026-09-07"
-}
-```
-
-`start_date` 表示所选学期第 1 周的周一；填写后页面顶部会按该日期计算各周的日期范围，周课表表头也会显示每天对应的日期，并在打开页面时自动切换到当前周。切换 `term` 时请同步更新。留空时，如果接口也没有提供日期，则不显示日期范围和每天日期，也不会根据日期自动切换周次，避免使用错误的推算日期。
-
-注意厦大的周次**从周日开始、周六结束**（校历里第一学期 2026-09-06 ~ 2027-01-09 正好是 18 个「周日→周六」，寒暑假也一样），而 `start_date` 填的是那一周里的周一。所以第 1 周 = 9/6(日) ~ 9/12(六)，周日算下一周的第一天（页面顶部的日期范围也按周日 ~ 周六显示）。
-
-如果配置了 `week`，或运行时传入 `--week`，则以手动指定的周次为准，不进行自动切换。
-
-在开学前，页面不会把尚未开始的课程误判为“今日课程”。
-
-周次下拉框会在自动模式下额外显示“未开学”和“已放假”状态；选择这两个状态时显示空课表，并分别提示开学日期或学期结束。
-
-也可以使用环境变量：
-
-```text
-XMU_USER=学号或工号
-XMU_PASS=密码
-```
-
-命令行参数的优先级高于环境变量和 `config.json`。
+[示例 HTML](docs/schedule-demo.html) · [查看原图](docs/schedule-demo.png)
 
 ## 使用
 
-```bash
-python fetch_schedule.py                         # 使用 config.json
-python fetch_schedule.py --user X --password Y   # 直接指定账号密码
-python fetch_schedule.py --week 3                # 查看第 3 周
-python fetch_schedule.py --term 20252            # 指定学年学期代码
-python fetch_schedule.py --no-open               # 生成但不打开浏览器
-python fetch_schedule.py --out out/my.html       # 指定输出路径
+```sh
+git clone https://github.com/ch-z-hc/XMU-CS.git
+cd XMU-CS
+pip install -r requirements.txt
 ```
 
-运行后默认生成 `schedule.html`。该文件包含个人课表数据，默认被 `.gitignore` 忽略；如果要部署页面，请确认其中没有不希望公开的信息。
-
-## 应用图标
-
-页面已内置一套与界面配色一致的应用图标（蓝色渐变背景 + 日历课表卡片）：
-
-- `assets/icon-192.png`：Android / Chrome 主屏图标
-- `assets/icon-512.png`：PWA 及高分辨率图标
-- `assets/apple-touch-icon.png`：iPhone / iPad「添加到主屏幕」图标
-- `manifest.json`：主屏应用名称、启动方式和图标配置
-
-修改设计后可重新生成所有图标：
-
-```bash
-python3 tools/make_icons.py
-```
-
-## 离线检查与界面维护
-
-页面模板在 `templates/schedule.html`；修改后，生成的课表仍是单个 HTML 文件。模板必须与 Python 脚本一起保留。
+将 `config.example.json` 复制为 `config.json`，填写账号和密码，然后运行：
 
 ```sh
-node test/week.mjs
-python test/build_html.py
-python tools/build_demo.py
+python fetch_schedule.py
 ```
 
-浏览器回归使用 Playwright：安装后运行 `node test/ui.cjs`，或通过 `PLAYWRIGHT_MODULE` 指定现有安装路径。CI 会检查 320 / 390 / 768 / 1440 像素视口、单日模式与弹窗键盘操作。所有课程均为模拟数据。
+默认生成并打开 `schedule.html`。可以将页面保存在本地，或放到自己的站点上查看。
 
-周次回归覆盖开学前、学期内、学期后及周日边界。演示页面由同一模板和 `docs/schedule-demo.json` 中的模拟数据生成，不读取个人配置或访问教务。
+## 周次
 
-## 工作原理
+厦大周次按周日到周六计算。配置中的 `start_date` 填第 1 周的周一；更换学期时需要同步检查。也可以通过 `--week` 手动指定周次。
 
-脚本使用 Python `requests.Session` 模拟 HTTP 会话：
+## 文档
 
-1. 请求 CAS 登录页，读取动态参数。
-2. 按前端规则使用 `AES-128-CBC / PKCS7` 加密密码并提交登录表单。
-3. 跟随门户重定向，使用 CAS Ticket 获取教务微应用会话。
-4. 调用教务接口，拉取学期、周次、节次、学生信息和完整学期课表。
-5. 将前端实际需要的数据内嵌到单文件 HTML 中。
+[安装配置、命令参数与页面维护](docs/guide.md)
 
-课表接口不传 `ZC` 参数，而是拉取完整学期课程，再由前端根据 `ZCBH` 周次掩码过滤，因此可以正常切换周次。
-
-## 安全说明
-
-- 不要提交 `config.json`、`schedule.html` 或包含真实账号信息的文件。
-- 生成 HTML 会包含姓名、课程、教师和教室；公开部署前请先检查内容。
-- 登录仅用于本人课表查询，请在合法合规范围内使用。
+`config.json` 包含登录凭据，生成的页面包含个人课表。两者都已被 Git 忽略，发布页面前请检查其中的信息。
