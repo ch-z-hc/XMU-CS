@@ -39,6 +39,7 @@
   @media (prefers-reduced-motion:reduce){button,.switch,.switch::after,.lesson,.modal-backdrop,.course-modal{transition:none}}
   button:disabled,select:disabled{opacity:.55;cursor:default}
   .grid-scroll.single-day table.kb{min-width:0;table-layout:fixed}.grid-scroll.single-day .blk{font-size:14px;padding:10px}.grid-scroll.single-day .blk .t1{line-height:1.5}
+  #nextLesson .name{white-space:normal;overflow-wrap:anywhere}#nextLesson .meta2{overflow-wrap:anywhere}
   pre.json{display:none}
 </style>
 <link rel="stylesheet" href="demo-fonts.css"/>
@@ -65,6 +66,11 @@
     </div>
     <label class="toggle"><input type="checkbox" id="onlyToday"/><span class="switch"></span><span>仅显示今天</span></label>
   </div>
+
+  <section class="card" id="cardNext">
+    <div class="section-head"><h2>下一节课</h2></div>
+    <div id="nextLesson"></div>
+  </section>
 
   <section class="card" id="cardToday">
     <div class="section-head">
@@ -179,6 +185,47 @@ function weekDate(week, xq){
 function dateNum(d){ return (d.getMonth()+1)+'/'+d.getDate(); }
 function byTime(a,b){ return (a.KSSJ||0)-(b.KSSJ||0); }
 
+function nextLesson(now){
+  let next = null;
+  DATA.weeks.forEach(week=>{
+    DATA.schedule.forEach(c=>{
+      if(!activeWeek(c, week)) return;
+      const date = weekDate(week, +c.XQ);
+      if(!date) return;
+      const startTime = fmt(c.KSSJ ?? DATA.periods.find(p=>+p.DM===+c.KSJCDM)?.KSSJ);
+      const endTime = fmt(c.JSSJ ?? DATA.periods.find(p=>+p.DM===+c.JSJCDM)?.JSSJ);
+      if(!/^\d{2}:\d{2}$/.test(startTime) || !/^\d{2}:\d{2}$/.test(endTime)) return;
+      const start = new Date(date), end = new Date(date);
+      start.setHours(...startTime.split(':').map(Number), 0, 0);
+      end.setHours(...endTime.split(':').map(Number), 0, 0);
+      if(now <= end && (!next || start < next.start)) next = {c, start, end, startTime, endTime};
+    });
+  });
+  return next;
+}
+
+let nextLessonTimer;
+function renderNext(){
+  clearTimeout(nextLessonTimer);
+  const now = new Date();
+  const next = nextLesson(now);
+  const box = $('#nextLesson');
+  if(!next){
+    box.innerHTML = '<p class="empty" role="status">'+(DATA.term.startDate ? '暂无后续课程' : '未设置学期开始日期')+'</p>';
+    return;
+  }
+  const {c, start, end, startTime, endTime} = next;
+  const div = document.createElement('div'); div.className = 'lesson';
+  div.innerHTML = '<div class="time"><b>'+startTime+'</b><span>'+endTime+'</span></div>'+
+    '<div class="info"><div class="name">'+esc(prettyText(c.KCMC||''))+'</div>'+
+    '<div class="meta2"><span>'+dateLabel(start)+'</span>'+(c.JASMC ? '<span>'+esc(prettyText(c.JASMC))+'</span>' : '')+'</div></div>'+
+    '<div class="color-strip '+courseColor[c.KCDM+'-'+c.BJMC]+'"></div>';
+  bindCourseTrigger(div,c);
+  box.replaceChildren(div);
+  nextLessonTimer = setTimeout(renderNext, Math.min(end-now+1, 2147483647));
+}
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) renderNext(); });
+
 // 周次下拉
 (function(){
   const sel = $('#weekSel');
@@ -231,6 +278,7 @@ function render(){
   ['weekSel', 'btnPrev', 'btnNext'].forEach(id=>{ document.getElementById(id).disabled = onlyToday; });
   $('#heroWeek').textContent = status==='before' ? '未开学' : status==='after' ? '已放假' : '第 '+week+' 周';
   $('#heroWeekRange').textContent = weekRangeLabel(status || week);
+  renderNext();
   renderToday(weekCourses, week, status);
   renderGrid(week, weekCourses, dayCols, onlyToday);
 }

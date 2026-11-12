@@ -20,8 +20,11 @@ const root = path.resolve(__dirname, '..');
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: 960 });
       await page.goto('http://schedule.test/');
+      assert.equal(await page.locator('#nextLesson .name').innerText(), '数据库系统');
+      assert(await page.locator('#cardNext').evaluate(element => element.nextElementSibling.id === 'cardToday'));
       for (const week of ['before', '1', '9', '16', 'after']) {
         await page.selectOption('#weekSel', week);
+        assert.equal(await page.locator('#nextLesson .name').innerText(), '数据库系统');
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
         if (week !== '9') assert((await page.locator('#todayList').innerText()).trim());
       }
@@ -51,6 +54,19 @@ const root = path.resolve(__dirname, '..');
       assert.equal(await page.locator('#weekSel').isDisabled(), false);
       console.log('PASS ' + width + 'px: week/empty states, daily column, modal keyboard and focus return');
     }
+    await page.clock.pauseAt(new Date('2026-11-05T11:49:59+08:00'));
+    await page.goto('http://schedule.test/');
+    await page.clock.runFor(1000);
+    assert.equal(await page.locator('#nextLesson .name').innerText(), '数据库系统');
+    await page.clock.runFor(1);
+    assert.equal(await page.locator('#nextLesson .name').innerText(), '学术写作');
+    const next = page.locator('#nextLesson .lesson');
+    await next.focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#modalTitle').innerText(), '学术写作');
+    await page.keyboard.press('Escape');
+    assert(await next.evaluate(element => element === document.activeElement));
+    console.log('PASS next lesson boundary timer, week independence and keyboard details');
     await page.clock.setFixedTime(new Date('2026-11-08T10:00:00+08:00'));
     await page.goto('http://schedule.test/');
     await page.locator('#onlyToday').check({ force: true });
