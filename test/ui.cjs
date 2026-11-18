@@ -21,7 +21,9 @@ const root = path.resolve(__dirname, '..');
       await page.setViewportSize({ width, height: 960 });
       await page.goto('http://schedule.test/');
       assert.equal(await page.locator('#nextLesson .name').innerText(), '数据库系统');
-      assert(await page.locator('#cardNext').evaluate(element => element.nextElementSibling.id === 'cardToday'));
+      assert.equal(await page.locator('#cardNext').isVisible(), width > 720);
+      assert.match(await page.locator('#todayList .is-next').innerText(), /数据库系统/);
+      if (width > 720) assert(await page.locator('#kb').evaluate(el => el.getBoundingClientRect().top < 400));
       for (const week of ['before', '1', '9', '16', 'after']) {
         await page.selectOption('#weekSel', week);
         assert.equal(await page.locator('#nextLesson .name').innerText(), '数据库系统');

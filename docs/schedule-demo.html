@@ -22,9 +22,8 @@
   .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 72px}
   .hero{position:relative;overflow:hidden;color:#fff;background:linear-gradient(125deg,#0a315b 0%,#10528b 58%,#1876ad 100%);border-radius:28px;padding:24px 28px 34px;box-shadow:0 24px 60px rgba(11,55,100,.22)}
   .hero::before,.hero::after{content:"";position:absolute;border:1px solid rgba(255,255,255,.13);border-radius:50%;pointer-events:none}.hero::before{width:280px;height:280px;right:-76px;top:-152px}.hero::after{width:180px;height:180px;right:66px;bottom:-144px}
-  .hero-main{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-top:8px}.eyebrow{margin:0 0 7px;color:#a9d6f5;font-size:11px;font-weight:750;letter-spacing:.18em}.hero h1{margin:0;font-family:Georgia,"Songti SC","STSong",serif;font-size:42px;font-weight:700;letter-spacing:.02em;line-height:1.15}.hero-name{margin:10px 0 0;color:rgba(255,255,255,.72);font-size:15px;font-weight:650}
-  .week-orb{min-width:178px;padding:18px 20px;border:1px solid rgba(255,255,255,.22);border-radius:18px;background:rgba(255,255,255,.10);backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}.week-orb span{display:block;color:rgba(255,255,255,.65);font-size:11px}.week-orb strong{display:block;margin:2px 0 4px;font-size:24px;line-height:1.25}.week-orb small{display:block;color:rgba(255,255,255,.72);font-size:12px;line-height:1.35;white-space:nowrap}.week-orb small:empty{display:none}
-  .toolbar{display:flex;align-items:center;gap:20px;margin-bottom:18px;padding:14px 16px 14px 20px;background:rgba(255,255,255,.78);border:1px solid rgba(222,230,239,.92);border-radius:18px;box-shadow:0 8px 30px rgba(27,55,90,.05);backdrop-filter:blur(12px)}.control-copy{min-width:120px;margin-right:auto}.section-kicker{display:block;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.control-copy strong{display:block;font-size:15px;margin-top:1px}
+  .hero-main{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-top:8px}.hero h1{margin:0;font-family:Georgia,"Songti SC","STSong",serif;font-size:42px;font-weight:700;letter-spacing:.02em;line-height:1.15}.hero-name{margin:10px 0 0;color:rgba(255,255,255,.72);font-size:15px;font-weight:650}
+  .section-kicker{display:block;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
   .week-switch{display:flex;align-items:center;gap:8px;padding:4px;background:#edf2f7;border-radius:13px}select,button{height:38px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px}select{min-width:104px;padding:0 34px 0 13px;font-weight:700;cursor:pointer}button{padding:0 12px;cursor:pointer;transition:transform .15s ease,background .15s ease,border-color .15s ease}button:hover{background:var(--accent-soft);border-color:#c9deee}button:active{transform:translateY(1px)}select:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(23,105,170,.18);outline-offset:2px}.week-switch button{width:38px;padding:0;font-size:18px;background:transparent;border-color:transparent}
   .toggle{display:flex;align-items:center;gap:9px;color:#536176;font-size:13px;font-weight:600;cursor:pointer;user-select:none}.toggle input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}.switch{position:relative;width:38px;height:22px;border-radius:999px;background:#cbd5df;transition:background .2s ease}.switch::after{content:"";position:absolute;width:16px;height:16px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(33,45,61,.22);transition:transform .2s ease}.toggle input:checked + .switch{background:var(--accent)}.toggle input:checked + .switch::after{transform:translateX(16px)}.toggle input:focus-visible + .switch{outline:3px solid rgba(23,105,170,.18);outline-offset:2px}
   .card{background:rgba(255,255,255,.96);border:1px solid rgba(224,231,239,.95);border-radius:22px;padding:22px;margin-bottom:18px;box-shadow:0 12px 36px rgba(27,55,90,.055)}.section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.section-head h2{margin:2px 0 0;font-size:19px;font-weight:750;letter-spacing:-.01em}.section-meta{display:inline-flex;align-items:center;min-height:30px;padding:0 11px;color:#5f6d7f;background:#f3f6f9;border:1px solid var(--line);border-radius:999px;font-size:12px}.section-meta b{color:var(--accent);margin-right:3px}.empty{position:relative;color:var(--muted);text-align:center;padding:32px 0 28px;font-size:14px}.empty::before{content:"";display:block;width:34px;height:34px;margin:0 auto 10px;border:2px solid #b8c9d8;border-top-color:transparent;border-radius:50%;transform:rotate(-22deg)}
@@ -33,14 +32,43 @@
   .blk{position:absolute;left:2px;right:2px;display:flex;align-items:center;justify-content:center;padding:6px;background:var(--course-bg);border:1px solid var(--course-border);border-left:3px solid var(--course);border-radius:7px;font-size:12px;overflow:hidden;cursor:pointer;box-shadow:0 2px 5px rgba(28,45,66,.035);transition:transform .16s ease,box-shadow .16s ease}.blk:hover,.blk:focus-visible{transform:translateY(-1px);box-shadow:0 6px 14px rgba(28,45,66,.12);outline:none}.blk .t1{display:block;overflow:hidden;color:var(--course-ink);font-weight:750;line-height:1.3;text-align:center;word-break:normal;overflow-wrap:anywhere}
   .tc1{--course:#3977c3;--course-bg:#edf4fc;--course-border:#d5e5f6;--course-ink:#245489;--course-muted:#5c7796}.tc2{--course:#3b9276;--course-bg:#edf8f4;--course-border:#d3ede4;--course-ink:#286b56;--course-muted:#5a7f72}.tc3{--course:#ca7b3a;--course-bg:#fff5ea;--course-border:#f4dfc7;--course-ink:#92531f;--course-muted:#947356}.tc4{--course:#8d67ba;--course-bg:#f6f0fb;--course-border:#e6d8f2;--course-ink:#66438f;--course-muted:#7d6a91}.tc5{--course:#348c9d;--course-bg:#ecf8fa;--course-border:#d0ebef;--course-ink:#286a76;--course-muted:#597e85}.tc6{--course:#c85e67;--course-bg:#fff0f1;--course-border:#f4d6d9;--course-ink:#93434a;--course-muted:#93686c}.tc7{--course:#6575b9;--course-bg:#f0f2fb;--course-border:#dce1f5;--course-ink:#45558f;--course-muted:#687399}
   body.modal-open{overflow:hidden}.modal-backdrop{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(8,29,53,.48);opacity:0;visibility:hidden;transition:opacity .18s ease}.modal-backdrop.open{opacity:1;visibility:visible}.course-modal{position:relative;width:min(100%,460px);padding:27px 28px 25px;background:#fff;border:1px solid rgba(224,231,239,.95);border-radius:24px;box-shadow:0 24px 70px rgba(8,29,53,.25);transform:translateY(10px) scale(.98);transition:transform .2s ease}.modal-backdrop.open .course-modal{transform:none}.modal-close{position:absolute;right:15px;top:14px;width:32px;height:32px;padding:0;border:0;border-radius:50%;color:#718096;background:#f2f5f8;font-size:22px;line-height:1}.modal-close:hover{color:var(--ink);background:#e8eef4}.modal-kicker{color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.16em}.modal-title{margin:7px 38px 3px 0;color:var(--ink);font-size:23px;line-height:1.3}.modal-class{min-height:18px;color:var(--muted);font-size:12px}.modal-details{display:grid;gap:9px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.detail-row{display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:start;font-size:13px}.detail-row span{color:var(--muted)}.detail-row b{color:var(--ink);font-weight:650;word-break:normal;overflow-wrap:anywhere}.modal-hint{margin:20px 0 0;color:#93a0af;font-size:11px}
-  @media (max-width:800px){.wrap{padding:16px 12px 48px}.hero{border-radius:22px;padding:20px 20px 30px}.hero-main{margin-top:8px}.toolbar{align-items:flex-end;flex-wrap:wrap;gap:12px}.control-copy{width:100%}.toggle{margin-left:auto}}
-@media (max-width:560px){.hero-main{display:block;margin-top:8px}.hero h1{font-size:34px}.week-orb{display:flex;align-items:center;gap:8px;min-width:0;margin-top:22px;padding:12px 14px}.week-orb span{display:none}.week-orb strong{font-size:18px;margin:0}.week-orb small{margin-left:auto;font-size:11px;text-align:right;white-space:normal}.toolbar{padding:14px}.control-copy{display:none}.week-switch{flex:1}.week-switch select{flex:1}.toggle{width:100%;justify-content:flex-end}.card{padding:17px 14px;border-radius:18px}.lesson{gap:10px;padding-right:10px}.lesson .time{min-width:76px;padding:0 11px}.lesson .class-name{display:none}.section-meta{font-size:11px}.modal-backdrop{align-items:end;padding:12px}.course-modal{width:100%;padding:24px 20px 22px;border-radius:24px 24px 15px 15px}.modal-title{font-size:21px}}
+  @media (max-width:800px){.wrap{padding:16px 12px 48px}.hero{border-radius:22px;padding:20px 20px 30px}.hero-main{margin-top:8px}.toggle{margin-left:auto}}
+@media (max-width:560px){.hero-main{display:block;margin-top:8px}.hero h1{font-size:34px}.week-switch select{flex:1}.card{padding:17px 14px;border-radius:18px}.lesson{gap:10px;padding-right:10px}.lesson .time{min-width:76px;padding:0 11px}.lesson .class-name{display:none}.section-meta{font-size:11px}.modal-backdrop{align-items:end;padding:12px}.course-modal{width:100%;padding:24px 20px 22px;border-radius:24px 24px 15px 15px}.modal-title{font-size:21px}}
   @media (max-width:560px){.wrap{padding-left:8px;padding-right:8px}.hero{padding:18px 16px 24px}.hero h1{font-size:31px}.hero-name{font-size:14px}.card{padding:15px 10px}.grid-scroll{overflow-x:hidden}.grid-scroll table.kb{min-width:0;table-layout:fixed;font-size:11px}.grid-scroll table.kb th.timecol,.grid-scroll table.kb td.timecell{width:54px;min-width:54px}.grid-scroll table.kb th.timecol .tc-long{display:none}.grid-scroll table.kb th.timecol .tc-short{display:inline}.grid-scroll table.kb th.daycol{padding-left:2px;padding-right:2px}.grid-scroll table.kb th.daycol .dn{font-size:11px}.grid-scroll table.kb th.daycol .dd{font-size:10px}.grid-scroll table.kb td.timecell div{font-size:10px}.grid-scroll table.kb td.timecell .tm{flex-direction:column;align-items:center;line-height:1.25}.grid-scroll .blk{padding:5px 4px;font-size:10px;border-left-width:2px}.grid-scroll .blk .t1{line-height:1.2}.section-head h2{font-size:17px}.lesson .name{font-size:14px}}
   @media (prefers-reduced-motion:reduce){button,.switch,.switch::after,.lesson,.modal-backdrop,.course-modal{transition:none}}
   button:disabled,select:disabled{opacity:.55;cursor:default}
   .grid-scroll.single-day table.kb{min-width:0;table-layout:fixed}.grid-scroll.single-day .blk{font-size:14px;padding:10px}.grid-scroll.single-day .blk .t1{line-height:1.5}
   #nextLesson .name{white-space:normal;overflow-wrap:anywhere}#nextLesson .meta2{overflow-wrap:anywhere}
   pre.json{display:none}
+
+  .hero{margin-bottom:14px;padding:18px 22px;border-radius:18px}
+  .hero-main{margin:0;align-items:center}
+  .hero h1{font-size:28px}
+  .hero-name{margin:2px 0 0}
+  .week-controls{display:grid;grid-template-columns:auto auto;align-items:center;gap:4px 18px}
+  .week-controls small{grid-column:1/-1;color:#e2eff9;font-size:12px}
+  .week-controls .toggle{color:#fff}
+  #cardNext{display:flex;align-items:center;gap:16px;padding:8px 18px}
+  #cardNext h2{margin:0;font-size:15px;white-space:nowrap}
+  #cardNext .section-head{margin:0}
+  #nextLesson{min-width:0;flex:1}
+  #nextLesson .lesson{min-height:44px;padding:6px 10px;border:0;background:transparent;gap:10px;flex-wrap:wrap}
+  #nextLesson .lesson .time{min-width:0;padding:0;border:0}
+  #nextLesson .lesson .time span,#nextLesson .color-strip{display:none}
+  #nextLesson .info{display:flex;align-items:baseline;gap:6px 14px;flex-wrap:wrap}
+  #nextLesson .meta2{margin:0}
+  #nextLesson .empty{padding:8px;text-align:left}
+  #nextLesson .empty::before{display:none}
+  .lesson.is-next{border-color:var(--accent);background:var(--accent-soft)}
+  .next-label{color:var(--accent);font-weight:700}
+  @media(min-width:721px){.wrap{display:flex;flex-direction:column}#cardToday{order:1}}
+  @media(max-width:720px){
+    .hero-main{display:block}
+    .week-controls{margin-top:12px;grid-template-columns:minmax(0,auto) auto;justify-content:start;gap:6px 8px}
+    .week-switch{gap:2px}.week-switch select{min-width:0;padding:0 4px}
+    .week-switch button{width:30px}.week-controls .toggle{gap:4px;margin:0}
+    #cardNext.in-today{display:none}
+  }
 </style>
 <link rel="stylesheet" href="demo-fonts.css"/>
 </head>
@@ -49,23 +77,20 @@
   <header class="hero">
     <div class="hero-main">
       <div>
-        <p class="eyebrow">MY WEEKLY SCHEDULE</p>
         <h1>我的课表</h1>
         <p class="hero-name" id="heroName"></p>
       </div>
-      <div class="week-orb"><span>当前查看</span><strong id="heroWeek"></strong><small id="heroWeekRange"></small></div>
+      <div class="week-controls">
+        <div class="week-switch">
+          <button id="btnPrev" class="prev" aria-label="上一周" title="上一周">←</button>
+          <select id="weekSel" aria-label="选择周次"></select>
+          <button id="btnNext" class="next" aria-label="下一周" title="下一周">→</button>
+        </div>
+        <label class="toggle"><input type="checkbox" id="onlyToday"/><span class="switch"></span><span>仅显示今天</span></label>
+        <small id="heroWeekRange"></small>
+      </div>
     </div>
   </header>
-
-  <div class="toolbar">
-    <div class="control-copy"><span class="section-kicker">WEEK VIEW</span><strong>浏览课表</strong></div>
-    <div class="week-switch">
-      <button id="btnPrev" class="prev" aria-label="上一周" title="上一周">←</button>
-      <select id="weekSel" aria-label="选择周次"></select>
-      <button id="btnNext" class="next" aria-label="下一周" title="下一周">→</button>
-    </div>
-    <label class="toggle"><input type="checkbox" id="onlyToday"/><span class="switch"></span><span>仅显示今天</span></label>
-  </div>
 
   <section class="card" id="cardNext">
     <div class="section-head"><h2>下一节课</h2></div>
@@ -74,7 +99,7 @@
 
   <section class="card" id="cardToday">
     <div class="section-head">
-      <div><span class="section-kicker">TODAY</span><h2>今日课程</h2></div>
+      <h2>今日课程</h2>
       <span class="section-meta" id="todayDate"></span>
     </div>
     <div class="timeline" id="todayList"></div>
@@ -205,10 +230,8 @@ function nextLesson(now){
 }
 
 let nextLessonTimer;
-function renderNext(){
+function renderNext(next, now){
   clearTimeout(nextLessonTimer);
-  const now = new Date();
-  const next = nextLesson(now);
   const box = $('#nextLesson');
   if(!next){
     box.innerHTML = '<p class="empty" role="status">'+(DATA.term.startDate ? '暂无后续课程' : '未设置学期开始日期')+'</p>';
@@ -222,9 +245,9 @@ function renderNext(){
     '<div class="color-strip '+courseColor[c.KCDM+'-'+c.BJMC]+'"></div>';
   bindCourseTrigger(div,c);
   box.replaceChildren(div);
-  nextLessonTimer = setTimeout(renderNext, Math.min(end-now+1, 2147483647));
+  nextLessonTimer = setTimeout(render, Math.min(end-now+1, 2147483647));
 }
-document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) renderNext(); });
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) render(); });
 
 // 周次下拉
 (function(){
@@ -276,17 +299,19 @@ function render(){
   document.querySelector('.grid-scroll').classList.toggle('single-day', onlyToday);
   $('#gridKicker').textContent = onlyToday ? 'DAILY OVERVIEW' : 'WEEKLY OVERVIEW';
   ['weekSel', 'btnPrev', 'btnNext'].forEach(id=>{ document.getElementById(id).disabled = onlyToday; });
-  $('#heroWeek').textContent = status==='before' ? '未开学' : status==='after' ? '已放假' : '第 '+week+' 周';
   $('#heroWeekRange').textContent = weekRangeLabel(status || week);
-  renderNext();
-  renderToday(weekCourses, week, status);
+  const now = new Date();
+  const next = nextLesson(now);
+  renderNext(next, now);
+  renderToday(status ? [] : DATA.schedule.filter(c=>activeWeek(c, week)), week, status, next);
   renderGrid(week, weekCourses, dayCols, onlyToday);
 }
 
-function renderToday(list, week, status){
+function renderToday(list, week, status, next){
   const box = $('#todayList');
   const todayCourses = list.filter(c=>isToday(c.XQ, week)).sort(byTime);
-  $('#cardToday').hidden = false;
+  const nextToday = next && next.start.toDateString() === new Date().toDateString() && todayCourses.includes(next.c);
+  $('#cardNext').classList.toggle('in-today', Boolean(nextToday));
   if(!todayCourses.length){
     const text = status === 'before' ? '尚未开学' : status === 'after' ? '本学期已结束' :
       DATA.term.startDate && currentWeekNumber() !== week ? '当前查看的周次不包含今天' : '今天没有课程';
@@ -298,10 +323,14 @@ function renderToday(list, week, status){
     const weeks = c.ZCMC || '';
     const div = document.createElement('div'); div.className='lesson';
     const key = c.KCDM+'-'+c.BJMC;
+    const upcoming = nextToday && c === next.c;
+    div.classList.toggle('is-next', Boolean(upcoming));
+    const marker = upcoming ? '<span class="next-label">下一节课</span>' : '';
+    const room = c.JASMC ? '<span>'+esc(prettyText(c.JASMC))+'</span>' : '';
     const meta = weeks ? '<span>'+esc(prettyText(weeks))+'</span>' : '';
     div.innerHTML = '<div class="time"><b>'+fmt(c.KSSJ)+'</b><span>'+fmt(c.JSSJ)+'</span></div>'+
       '<div class="info"><div class="name">'+esc(prettyText(c.KCMC||''))+(c.BJMC?' <span class="class-name">('+esc(prettyText(c.BJMC))+')</span>':'')+'</div>'+
-      '<div class="meta2">'+meta+'</div></div>'+
+      '<div class="meta2">'+marker+room+meta+'</div></div>'+
       '<div class="color-strip '+courseColor[key]+'"></div>';
     bindCourseTrigger(div,c);
     box.appendChild(div);
