@@ -70,14 +70,14 @@ python fetch_schedule.py --out out/my.html       # 指定输出路径
 
 ## 应用图标
 
-页面已内置一套与界面配色一致的应用图标（蓝色渐变背景 + 日历课表卡片）：
+蓝白色的折叠课表用于浏览器标签和手机主屏幕。
 
 - `assets/icon-192.png`：Android / Chrome 主屏图标
 - `assets/icon-512.png`：PWA 及高分辨率图标
 - `assets/apple-touch-icon.png`：iPhone / iPad「添加到主屏幕」图标
 - `manifest.json`：主屏应用名称、启动方式和图标配置
 
-修改设计后可重新生成所有图标：
+修改 `assets/icon-source.svg` 后，在安装了 CairoSVG 的 Python 环境中运行
 
 ```bash
 python3 tools/make_icons.py
